@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_news_app/src/model/category.dart';
+import 'package:flutter_news_app/src/model/category/category.dart';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
