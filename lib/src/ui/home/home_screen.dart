@@ -38,6 +38,30 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Latest News',
+              style: Theme.of(context).textTheme.subtitle.merge(
+                    TextStyle(
+                      fontSize: 18.0,
+                      color: Color(0xFF325384).withOpacity(0.8),
+                    ),
+                  ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Top stories at the moment',
+              style: Theme.of(context).textTheme.caption.merge(
+                    TextStyle(
+                      color: Color(0xFF325384).withOpacity(0.5),
+                    ),
+                  ),
+            ),
+          ),
         ],
       ),
     );
