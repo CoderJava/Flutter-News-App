@@ -23,6 +23,10 @@ dependencies:
   # Automatically generate code for converting to and from JSON by annotating Dart classes.
   json_serializable: ^3.2.3
 
+  # Package provides internalization and localization facilities, including message translation,
+  # plurals and genders, date/number formatting and parsing, and bidirectional text.
+  intl: ^0.16.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,6 +45,8 @@ flutter:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
