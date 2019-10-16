@@ -309,11 +309,20 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
         right: 16.0,
         bottom: mediaQuery.padding.bottom + 16.0,
       ),
-      child: BlocBuilder(
-        bloc: homeBloc,
-        builder: (BuildContext context, DataState state) {
-          return _buildWidgetContentLatestNews(state, mediaQuery);
+      child: BlocListener<HomeBloc, DataState>(
+        listener: (context, state) {
+          if (state is DataFailed) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage)),
+            );
+          }
         },
+        child: BlocBuilder(
+          bloc: homeBloc,
+          builder: (BuildContext context, DataState state) {
+            return _buildWidgetContentLatestNews(state, mediaQuery);
+          },
+        ),
       ),
     );
   }
@@ -424,38 +433,42 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          itemArticle.title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color(0xFF325384),
-                            fontWeight: FontWeight.w400,
+                    child: SizedBox(
+                      height: 72.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            itemArticle.title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Color(0xFF325384),
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.launch,
-                              size: 12.0,
-                              color: Color(0xFF325384).withOpacity(0.5),
-                            ),
-                            SizedBox(width: 4.0),
-                            Text(
-                              itemArticle.source.name,
-                              style: TextStyle(
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.launch,
+                                size: 12.0,
                                 color: Color(0xFF325384).withOpacity(0.5),
-                                fontSize: 12.0,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              SizedBox(width: 4.0),
+                              Text(
+                                itemArticle.source.name,
+                                style: TextStyle(
+                                  color: Color(0xFF325384).withOpacity(0.5),
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
