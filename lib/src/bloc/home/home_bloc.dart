@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_news_app/src/api/api_repository.dart';
 import 'package:flutter_news_app/src/model/topheadlinesnews/response_top_headlinews_news.dart';
 
@@ -46,22 +45,52 @@ class HomeBloc extends Bloc<DataEvent, DataState> {
         }
         break;
       case 'business':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopBusinessHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       case 'entertainment':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopEntertainmentHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       case 'health':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopHealthHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       case 'science':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopScienceHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       case 'sport':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopSportHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       case 'technology':
-        // TODO: do something in here
+        final data = await apiRepository.fetchTopTechnologyHeadlinesNews();
+        if (data != null) {
+          yield DataSuccess(data);
+        } else {
+          yield DataFailed('Failed to fetch data');
+        }
         break;
       default:
         yield DataFailed('Unknown category');

@@ -228,7 +228,8 @@ class _WidgetCategoryState extends State<WidgetCategory> {
                   onTap: () {
                     setState(() {
                       indexSelectedCategory = index;
-                      homeBloc.dispatch(DataEvent('all'));
+                      homeBloc.dispatch(DataEvent(
+                          listCategories[indexSelectedCategory].title));
                     });
                   },
                   child: index == 0
@@ -358,7 +359,7 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
                     ),
                     gradient: LinearGradient(
                       colors: [
-                        Colors.black.withOpacity(0.5),
+                        Colors.black.withOpacity(0.8),
                         Colors.black.withOpacity(0.0),
                       ],
                       begin: Alignment.topCenter,
@@ -461,7 +462,8 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
                     padding: const EdgeInsets.only(left: 16.0),
                     child: ClipRRect(
                       child: Image.network(
-                        itemArticle.urlToImage,
+                        itemArticle.urlToImage ??
+                            'http://api.bengkelrobot.net:8001/assets/images/img_not_found.jpg',
                         width: 72.0,
                         height: 72.0,
                         fit: BoxFit.cover,
