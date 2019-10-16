@@ -7,9 +7,9 @@ import 'package:flutter_news_app/src/bloc/home/home_bloc.dart';
 import 'package:flutter_news_app/src/model/category/category.dart';
 import 'package:flutter_news_app/src/model/topheadlinesnews/response_top_headlinews_news.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-final GlobalKey<RefreshIndicatorState> refreshIndicatoryKey =
-    GlobalKey<RefreshIndicatorState>();
+final GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
 
     return Scaffold(
+      key: scaffoldState,
       body: BlocProvider<HomeBloc>(
         builder: (context) => HomeBloc(),
         child: Column(
@@ -359,24 +360,35 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
                     Radius.circular(8.0),
                   ),
                 ),
-                Container(
-                  width: mediaQuery.size.width,
-                  height: 192.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.0),
-                    ),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.8),
-                        Colors.black.withOpacity(0.0),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [
-                        0.0,
-                        0.7,
-                      ],
+                GestureDetector(
+                  onTap: () async {
+                    if (await canLaunch(itemArticle.url)) {
+                      await launch(itemArticle.url);
+                    } else {
+                      scaffoldState.currentState.showSnackBar(SnackBar(
+                        content: Text('Could not launch news'),
+                      ));
+                    }
+                  },
+                  child: Container(
+                    width: mediaQuery.size.width,
+                    height: 192.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.black.withOpacity(0.8),
+                          Colors.black.withOpacity(0.0),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: [
+                          0.0,
+                          0.7,
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -427,66 +439,73 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
               ],
             );
           } else {
-            return Container(
-              width: mediaQuery.size.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: SizedBox(
-                      height: 72.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            itemArticle.title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Color(0xFF325384),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.launch,
-                                size: 12.0,
-                                color: Color(0xFF325384).withOpacity(0.5),
-                              ),
-                              SizedBox(width: 4.0),
-                              Text(
-                                itemArticle.source.name,
-                                style: TextStyle(
-                                  color: Color(0xFF325384).withOpacity(0.5),
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: ClipRRect(
-                      child: Image.network(
-                        itemArticle.urlToImage ??
-                            'http://api.bengkelrobot.net:8001/assets/images/img_not_found.jpg',
-                        width: 72.0,
+            return GestureDetector(
+              onTap: () async {
+                if (await canLaunch(itemArticle.url)) {
+                  await launch(itemArticle.url);
+                }
+              },
+              child: Container(
+                width: mediaQuery.size.width,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: SizedBox(
                         height: 72.0,
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              itemArticle.title,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Color(0xFF325384),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.launch,
+                                  size: 12.0,
+                                  color: Color(0xFF325384).withOpacity(0.5),
+                                ),
+                                SizedBox(width: 4.0),
+                                Text(
+                                  itemArticle.source.name,
+                                  style: TextStyle(
+                                    color: Color(0xFF325384).withOpacity(0.5),
+                                    fontSize: 12.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: ClipRRect(
+                        child: Image.network(
+                          itemArticle.urlToImage ??
+                              'http://api.bengkelrobot.net:8001/assets/images/img_not_found.jpg',
+                          width: 72.0,
+                          height: 72.0,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }
