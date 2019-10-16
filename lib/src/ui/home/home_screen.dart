@@ -42,8 +42,8 @@ class HomeScreen extends StatelessWidget {
                       WidgetTitle(strToday),
                     ],
                   ),
-                  SizedBox(height: 8.0),
-                  buildWidgetSearch(),
+                  /*SizedBox(height: 8.0),
+                  buildWidgetSearch(),*/
                   SizedBox(height: 12.0),
                   WidgetCategory(),
                 ],
