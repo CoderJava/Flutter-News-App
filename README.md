@@ -1,5 +1,5 @@
 # Flutter News App
-News App built in with Flutter. 
+News App developed with Flutter. 
 
 ## Technology
 1. BLoC<br />
