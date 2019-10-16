@@ -1,16 +1,18 @@
-# flutter_news_app
+# Flutter News App
+News App built in with Flutter. 
 
-Flutter News App with NewsApi
+## Technology
+1. BLoC<br />
+BLoC (Business Logic Component) is design pattern helps to separate *presentation* from *business logic*.
+2. Dio<br />
+A powerful HTTP client for Dart, which supports interceptors, FormData, Request Cancellation, File Downloading, Timeout, etc.
+3. JSON Serializable<br />
+Automatically generate code for converting to and from JSON by annotating Dart classes.
+4. Intl<br />
+Plugin to provides internalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+5. Url Launcher<br />
+Flutter plugin for launching a URL on Android and iOS.
+6. Build Runner<br />
+Package to provides a concrete way of generating files using Dart code, outside of tools like `pub server/build`, files are always generated directly on disk, and rebuilds are *incremental-* inspired by tools such as Bazel.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![News App](https://github.com/CoderJava/Flutter-News-App/blob/master/screenshots/output_app.png)
