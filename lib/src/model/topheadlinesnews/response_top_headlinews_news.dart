@@ -6,18 +6,25 @@ class ResponseTopHeadlinesNews {
   String status;
   int totalResults;
   List<Article> articles;
+  String error;
 
   ResponseTopHeadlinesNews(this.status, this.totalResults, this.articles);
 
   factory ResponseTopHeadlinesNews.fromJson(Map<String, dynamic> json) =>
       _$ResponseTopHeadlinesNewsFromJson(json);
 
+  ResponseTopHeadlinesNews.withError(String errorValue) {
+    error = errorValue;
+  }
+
   Map<String, dynamic> toJson() => _$ResponseTopHeadlinesNewsToJson(this);
 
   @override
   String toString() {
-    return 'ResponseTopHeadlinesNews{status: $status, totalResults: $totalResults, articles: $articles}';
+    return 'ResponseTopHeadlinesNews{status: $status, totalResults: $totalResults, articles: $articles, error: $error}';
   }
+
+
 }
 
 @JsonSerializable()

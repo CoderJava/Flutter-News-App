@@ -6,66 +6,77 @@ class ApiProvider {
   final String _baseUrl =
       'https://newsapi.org/v2/top-headlines?country=id&apiKey=fc14ae62fff14511a901ad9537987354';
 
+  void printOutError(error, StackTrace stacktrace) {
+    print('Exception occured: $error with stacktrace: $stacktrace');
+  }
+
   Future<ResponseTopHeadlinesNews> getTopHeadlinesNews() async {
-    final response = await _dio.get(_baseUrl);
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get(_baseUrl);
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopBusinessHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=business');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=business');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top business headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopEntertainmentHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=entertainment');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=entertainment');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top entertainment headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopHealthHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=health');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=health');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top health headlinews news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopScienceHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=science');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=science');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top science headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopSportHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=sport');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=sport');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top sport headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 
   Future<ResponseTopHeadlinesNews> getTopTechnologyHeadlinesNews() async {
-    final response = await _dio.get('$_baseUrl&category=technology');
-    if (response.statusCode == 200) {
+    try {
+      final response = await _dio.get('$_baseUrl&category=technology');
       return ResponseTopHeadlinesNews.fromJson(response.data);
-    } else {
-      throw Exception('Failed to fetch top technology headlines news');
+    } catch (error, stacktrace) {
+      printOutError(error, stacktrace);
+      return ResponseTopHeadlinesNews.withError('$error');
     }
   }
 }
