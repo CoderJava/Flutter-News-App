@@ -30,6 +30,10 @@ dependencies:
   # Flutter plugin for launching a URL in the mobile platform. Supports iOS and Android.
   url_launcher: ^5.2.0
 
+  # Flutter library to load and cache network images. Can also be used with placeholder and
+  # error widgets.
+  cached_network_image: ^1.1.2+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -350,11 +351,18 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
             return Stack(
               children: <Widget>[
                 ClipRRect(
-                  child: Image.network(
-                    itemArticle.urlToImage,
-                    fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    imageUrl: itemArticle.urlToImage,
                     height: 192.0,
                     width: mediaQuery.size.width,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Platform.isAndroid
+                        ? CircularProgressIndicator()
+                        : CupertinoActivityIndicator(),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/img_not_found.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
@@ -492,12 +500,42 @@ class _WidgetLatestNewsState extends State<WidgetLatestNews> {
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: ClipRRect(
-                        child: Image.network(
+                        /*child: Image.network(
                           itemArticle.urlToImage ??
                               'http://api.bengkelrobot.net:8001/assets/images/img_not_found.jpg',
                           width: 72.0,
                           height: 72.0,
                           fit: BoxFit.cover,
+                        ),*/
+                        child: CachedNetworkImage(
+                          imageUrl: itemArticle.urlToImage,
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              width: 72.0,
+                              height: 72.0,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) => Container(
+                            width: 72.0,
+                            height: 72.0,
+                            child: Center(
+                              child: Platform.isAndroid
+                                  ? CircularProgressIndicator()
+                                  : CupertinoActivityIndicator(),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Image.asset(
+                            'assets/images/img_not_found.jpg',
+                            fit: BoxFit.cover,
+                            width: 72.0,
+                            height: 72.0,
+                          ),
                         ),
                         borderRadius: BorderRadius.all(
                           Radius.circular(4.0),
