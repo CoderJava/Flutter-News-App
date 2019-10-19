@@ -13,9 +13,7 @@ class ResponseTopHeadlinesNews {
   factory ResponseTopHeadlinesNews.fromJson(Map<String, dynamic> json) =>
       _$ResponseTopHeadlinesNewsFromJson(json);
 
-  ResponseTopHeadlinesNews.withError(String errorValue) {
-    error = errorValue;
-  }
+  ResponseTopHeadlinesNews.withError(this.error);
 
   Map<String, dynamic> toJson() => _$ResponseTopHeadlinesNewsToJson(this);
 
