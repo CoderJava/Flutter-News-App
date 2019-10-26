@@ -6,6 +6,7 @@ class ResponseTopHeadlinesNews {
   String status;
   int totalResults;
   List<Article> articles;
+  @JsonKey(ignore: true)
   String error;
 
   ResponseTopHeadlinesNews(this.status, this.totalResults, this.articles);

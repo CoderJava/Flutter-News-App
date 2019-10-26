@@ -32,7 +32,9 @@ dependencies:
 
   # Flutter library to load and cache network images. Can also be used with placeholder and
   # error widgets.
-  cached_network_image: ^1.1.2+1
+  cached_network_image: ^2.0.0-rc
+
+  flutter_stetho: ^0.5.0
 
 dev_dependencies:
   flutter_test:
