@@ -2,7 +2,7 @@
 News App developed with Flutter and API from [News API](https://newsapi.org)
 
 ## How to use
-Please open file **api_provider.dart** and change `apiKey` in variable `_baseUrl` with your own.
+Please open file **api_provider.dart** and change `YOUR_API_KEY` in the variable `_baseUrl` with your own.
 
 ## Technology
 1. BLoC<br />
