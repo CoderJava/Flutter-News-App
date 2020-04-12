@@ -53,6 +53,18 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "production, development"
+    productFlavors {
+        production {
+            resValue "string", "app_name", "News App"
+        }
+        development {
+            resValue "string", "app_name", "dev-News App"
+            applicationIdSuffix ".development"
+            versionNameSuffix "-dev"
+        }
+    }
 }
 
 flutter {
