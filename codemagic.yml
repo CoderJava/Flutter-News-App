@@ -1,0 +1,26 @@
+# Automatically generated on 2020-04-12 UTC from https://codemagic.io/app/5e93249b1838ac3d3e52a5bc/settings
+# Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
+
+workflows:
+  default-workflow:
+    name: Default Workflow
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+    scripts:
+      - flutter packages pub get
+      - flutter test
+    artifacts:
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - kolonel.yudisetiawan@gmail.com
