@@ -5,6 +5,8 @@ workflows:
   default-workflow:
     name: Default Workflow
     environment:
+      vars:
+        CODECOV_TOKEN: Encrypted(Z0FBQUFBQmVrMGRUSGRXRFVweTVGYUIzMThqbGNkNW5aSHE3SnYyeHg4amk3NEF4ZGVwakdXSFBmQVVoRmczZk9GaHdCakhORWcxMUtwZFVYeXJCSHhjWUNiZWM2d2tCUUpfWGwxSjZCaEhfUXlzOS1GN3VRRmdWanlNYnNxTmlleExZak5iWEFLTm0=)
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -17,7 +19,14 @@ workflows:
           source: true
     scripts:
       - flutter packages pub get
+      - |
+        #!/bin/sh
+        flutter test --coverage
       - flutter test
+      - |
+        #!/bin/bash
+        echo $CODECOV_TOKEN > .cc_token
+        bash <(curl -s https://codecov.io/bash) -t @.cc_token
     artifacts:
       - flutter_drive.log
     publishing:
