@@ -48,8 +48,8 @@ void main() {
 
   group('toJson', () {
     test(
-      'pastikan fungsi toJson mengembalikan nilai JSON dalam bentuk objek map yang valid ketika '
-      'melakukan konversi data model ke JSON',
+      'make sure the toJson function returns a JSON value in the form of a '
+      'valid map object when converting model data to JSON',
       () async {
         // arrange
         final resultCategoryNewsModel = tCategoryNewsModel.toJson();
