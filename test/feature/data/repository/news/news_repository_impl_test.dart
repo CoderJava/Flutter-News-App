@@ -94,7 +94,8 @@ void main() {
     );
 
     test(
-      'pastikan kembalikan objek ConnectionFailure ketika koneksi device sedang tidak terhubung ke internet',
+      'make sure to return the ConnectionFailure object when the device connection is not connected '
+      'to the internet',
       () async {
         // arrange
         setUpMockNetworkDisconnected();
