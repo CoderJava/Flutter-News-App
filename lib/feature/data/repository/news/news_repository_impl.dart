@@ -17,11 +17,11 @@ class NewsRepositoryImpl implements NewsRepository {
   });
 
   @override
-  Future<Either<Failure, TopHeadlinesNewsResponseModel>> getTopHeadlinesNews() async {
+  Future<Either<Failure, TopHeadlinesNewsResponseModel>> getTopHeadlinesNews(String category) async {
     var isConnected = await networkInfo.isConnected;
     if (isConnected) {
       try {
-        var response = await newsRemoteDataSource.getTopHeadlinesNews();
+        var response = await newsRemoteDataSource.getTopHeadlinesNews(category);
         return Right(response);
       } on DioError catch (error) {
         return Left(ServerFailure(error.message));
