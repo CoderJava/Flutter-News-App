@@ -60,6 +60,10 @@ dependencies:
   # Android or OS version the app is running on.
   device_info: ^0.4.2+1
 
+  # An SVG rendering and widget library for Flutter, which allows painting and displaying Scalable
+  # Vector Graphics 1.1 files.
+  flutter_svg: ^0.17.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,6 +93,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/images/
+    - assets/svg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
