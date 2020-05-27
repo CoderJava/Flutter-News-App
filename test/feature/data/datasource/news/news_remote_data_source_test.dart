@@ -138,4 +138,81 @@ void main() {
       },
     );
   });
+
+  group('searchTopHeadlinesNews', () {
+    final tKeyword = 'testKeyword';
+    final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
+      json.decode(
+        fixture('top_headlines_news_response_model.json'),
+      ),
+    );
+
+    void setUpMockDioSuccess() {
+      final responsePayload = json.decode(fixture('top_headlines_news_response_model.json'));
+      final response = Response(
+        data: responsePayload,
+        statusCode: 200,
+        headers: Headers.fromMap({
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        }),
+      );
+      when(mockDio.get(any, queryParameters: anyNamed('queryParameters'))).thenAnswer((_) async => response);
+    }
+
+    test(
+      'make sure there is a GET request to endpoint /v2/top-headlines?country=:country&apiKey=:apiKey&q=:q',
+      () async {
+        // arrange
+        setUpMockDioSuccess();
+
+        // act
+        await newsRemoteDataSource.searchTopHeadlinesNews(tKeyword);
+
+        // assert
+        verify(
+          mockDio.get(
+            '/v2/top-headlines',
+            queryParameters: {
+              'country': 'id',
+              'apiKey': constantConfig.apiKeyNewsApi,
+              'q': tKeyword,
+            },
+          ),
+        );
+      },
+    );
+
+    test(
+      'make sure to return the TopHeadlinesNewsResponseModel object when the response code is success from the '
+      'endpoint',
+      () async {
+        // arrange
+        setUpMockDioSuccess();
+
+        // act
+        final result = await newsRemoteDataSource.searchTopHeadlinesNews(tKeyword);
+
+        // assert
+        expect(result, tTopHeadlinesNewsResponseModel);
+      },
+    );
+
+    test(
+      'make sure to receive DioError when the response code fails from the endpoint',
+      () async {
+        // arrange
+        final response = Response(
+          data: 'Bad Request',
+          statusCode: 400,
+        );
+        when(mockDio.get(any, queryParameters: anyNamed('queryParameters'))).thenAnswer((_) async => response);
+
+        // act
+        final call = newsRemoteDataSource.searchTopHeadlinesNews(tKeyword);
+
+        // assert
+        expect(() => call, throwsA(TypeMatcher<DioError>()));
+      },
+    );
+  });
 }
