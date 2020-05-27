@@ -39,6 +39,7 @@ void main() {
   }
 
   group('getTopHeadlinesNews', () {
+    final tCategory = 'technology';
     final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
       json.decode(
         fixture('top_headlines_news_response_model.json'),
@@ -52,7 +53,7 @@ void main() {
         setUpMockNetworkConnected();
 
         // act
-        await newsRepositoryImpl.getTopHeadlinesNews();
+        await newsRepositoryImpl.getTopHeadlinesNews(tCategory);
 
         // assert
         verify(mockNetworkInfo.isConnected);
@@ -65,13 +66,13 @@ void main() {
       () async {
         // arrange
         setUpMockNetworkConnected();
-        when(mockNewsRemoteDataSource.getTopHeadlinesNews()).thenAnswer((_) async => tTopHeadlinesNewsResponseModel);
+        when(mockNewsRemoteDataSource.getTopHeadlinesNews(tCategory)).thenAnswer((_) async => tTopHeadlinesNewsResponseModel);
 
         // act
-        final result = await newsRepositoryImpl.getTopHeadlinesNews();
+        final result = await newsRepositoryImpl.getTopHeadlinesNews(tCategory);
 
         // assert
-        verify(mockNewsRemoteDataSource.getTopHeadlinesNews());
+        verify(mockNewsRemoteDataSource.getTopHeadlinesNews(tCategory));
         expect(result, Right(tTopHeadlinesNewsResponseModel));
       },
     );
@@ -82,13 +83,13 @@ void main() {
       () async {
         // arrange
         setUpMockNetworkConnected();
-        when(mockNewsRemoteDataSource.getTopHeadlinesNews()).thenThrow(DioError(error: 'testError'));
+        when(mockNewsRemoteDataSource.getTopHeadlinesNews(tCategory)).thenThrow(DioError(error: 'testError'));
 
         // act
-        final result = await newsRepositoryImpl.getTopHeadlinesNews();
+        final result = await newsRepositoryImpl.getTopHeadlinesNews(tCategory);
 
         // assert
-        verify(mockNewsRemoteDataSource.getTopHeadlinesNews());
+        verify(mockNewsRemoteDataSource.getTopHeadlinesNews(tCategory));
         expect(result, Left(ServerFailure('testError')));
       },
     );
@@ -101,7 +102,7 @@ void main() {
         setUpMockNetworkDisconnected();
 
         // act
-        final result = await newsRepositoryImpl.getTopHeadlinesNews();
+        final result = await newsRepositoryImpl.getTopHeadlinesNews(tCategory);
 
         // assert
         verify(mockNetworkInfo.isConnected);

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_news_app/core/error/failure.dart';
-import 'package:flutter_news_app/core/usecase/usecase.dart';
 import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlines_news_response_model.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
 import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
@@ -55,6 +54,7 @@ void main() {
   );
 
   group('LoadTopHeadlinesNews', () {
+    final tCategory = 'technology';
     final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
       json.decode(
         fixture('top_headlines_news_response_model.json'),
@@ -68,11 +68,11 @@ void main() {
         when(mockGetTopHeadlinesNews(any)).thenAnswer((_) async => Right(tTopHeadlinesNewsResponseModel));
 
         // act
-        topHeadlinesNewsBloc.add(LoadTopHeadlinesNewsEvent());
+        topHeadlinesNewsBloc.add(LoadTopHeadlinesNewsEvent(category: tCategory));
         await untilCalled(mockGetTopHeadlinesNews(any));
 
         // assert
-        verify(mockGetTopHeadlinesNews(NoParams()));
+        verify(mockGetTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: tCategory)));
       },
     );
 
@@ -86,14 +86,14 @@ void main() {
       },
       act: (bloc) {
         // act
-        return bloc.add(LoadTopHeadlinesNewsEvent());
+        return bloc.add(LoadTopHeadlinesNewsEvent(category: tCategory));
       },
       expect: [
         LoadingTopHeadlinesNewsState(),
         LoadedTopHeadlinesNewsState(listArticles: tTopHeadlinesNewsResponseModel.articles),
       ],
       verify: (_) async {
-        verify(mockGetTopHeadlinesNews(NoParams())).called(1);
+        verify(mockGetTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: tCategory))).called(1);
       },
     );
 
@@ -111,14 +111,14 @@ void main() {
       },
       act: (bloc) {
         // act
-        return bloc.add(LoadTopHeadlinesNewsEvent());
+        return bloc.add(LoadTopHeadlinesNewsEvent(category: tCategory));
       },
       expect: [
         LoadingTopHeadlinesNewsState(),
         FailureTopHeadlinesNewsState(errorMessage: 'testErrorMessage'),
       ],
       verify: (_) async {
-        verify(mockGetTopHeadlinesNews(NoParams())).called(1);
+        verify(mockGetTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: tCategory))).called(1);
       },
     );
 
@@ -130,14 +130,14 @@ void main() {
           return topHeadlinesNewsBloc;
         },
         act: (bloc) {
-          return bloc.add(LoadTopHeadlinesNewsEvent());
+          return bloc.add(LoadTopHeadlinesNewsEvent(category: tCategory));
         },
         expect: [
           LoadingTopHeadlinesNewsState(),
           FailureTopHeadlinesNewsState(errorMessage: messageConnectionFailure),
         ],
         verify: (_) async {
-          verify(mockGetTopHeadlinesNews(NoParams())).called(1);
+          verify(mockGetTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: tCategory))).called(1);
         });
   });
 }

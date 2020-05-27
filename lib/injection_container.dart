@@ -6,6 +6,7 @@ import 'package:flutter_news_app/core/network/network_info.dart';
 import 'package:flutter_news_app/core/util/dio_logging_interceptor.dart';
 import 'package:flutter_news_app/feature/data/datasource/news/news_remote_data_source.dart';
 import 'package:flutter_news_app/feature/data/repository/news/news_repository_impl.dart';
+import 'package:flutter_news_app/feature/domain/repository/news/news_repository.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
 import 'package:get_it/get_it.dart';
 
@@ -24,10 +25,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetTopHeadlinesNews(newsRepository: sl()));
 
   // Repository
-  sl.registerLazySingleton(() => NewsRepositoryImpl(newsRemoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NewsRepository>(() => NewsRepositoryImpl(newsRemoteDataSource: sl(), networkInfo: sl()));
 
   // Data Source
-  sl.registerLazySingleton(() => NewsRemoteDataSourceImpl(dio: sl(), constantConfig: sl()));
+  sl.registerLazySingleton<NewsRemoteDataSource>(() => NewsRemoteDataSourceImpl(dio: sl(), constantConfig: sl()));
 
   /**
    * ! Core

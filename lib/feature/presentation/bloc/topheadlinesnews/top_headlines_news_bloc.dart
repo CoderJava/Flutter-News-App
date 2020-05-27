@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_news_app/core/error/failure.dart';
-import 'package:flutter_news_app/core/usecase/usecase.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
 import 'package:meta/meta.dart';
 
@@ -21,13 +20,13 @@ class TopHeadlinesNewsBloc extends Bloc<TopHeadlinesNewsEvent, TopHeadlinesNewsS
     TopHeadlinesNewsEvent event,
   ) async* {
     if (event is LoadTopHeadlinesNewsEvent) {
-      yield* _mapLoadTopHeadlinesNewsEventToState();
+      yield* _mapLoadTopHeadlinesNewsEventToState(event);
     }
   }
 
-  Stream<TopHeadlinesNewsState> _mapLoadTopHeadlinesNewsEventToState() async* {
+  Stream<TopHeadlinesNewsState> _mapLoadTopHeadlinesNewsEventToState(LoadTopHeadlinesNewsEvent event) async* {
     yield LoadingTopHeadlinesNewsState();
-    var response = await getTopHeadlinesNews(NoParams());
+    var response = await getTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: event.category));
     yield response.fold(
       // ignore: missing_return
       (failure) {

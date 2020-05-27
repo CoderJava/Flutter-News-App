@@ -4,6 +4,6 @@ import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlin
 
 abstract class NewsRepository {
 
-  Future<Either<Failure, TopHeadlinesNewsResponseModel>> getTopHeadlinesNews();
+  Future<Either<Failure, TopHeadlinesNewsResponseModel>> getTopHeadlinesNews(String category);
 
 }

@@ -4,10 +4,10 @@ import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlin
 import 'package:meta/meta.dart';
 
 abstract class NewsRemoteDataSource {
-  /// Calls the baseUrl:/v2/top-headlines?country=:country&apiKey=:apiKey endpoint
+  /// Calls the baseUrl:/v2/top-headlines?category=:category&country=:country&apiKey=:apiKey endpoint
   ///
   /// Throws a [DioError] for all error codes.
-  Future<TopHeadlinesNewsResponseModel> getTopHeadlinesNews();
+  Future<TopHeadlinesNewsResponseModel> getTopHeadlinesNews(String category);
 }
 
 class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
@@ -20,14 +20,26 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
   });
 
   @override
-  Future<TopHeadlinesNewsResponseModel> getTopHeadlinesNews() async {
-    var response = await dio.get(
-      '/v2/top-headlines',
-      queryParameters: {
-        'country': 'id',
-        'apiKey': constantConfig.apiKeyNewsApi,
-      },
-    );
+  Future<TopHeadlinesNewsResponseModel> getTopHeadlinesNews(String category) async {
+    var response;
+    if (category == 'all') {
+      response = await dio.get(
+        '/v2/top-headlines',
+        queryParameters: {
+          'country': 'id',
+          'apiKey': constantConfig.apiKeyNewsApi,
+        },
+      );
+    } else {
+      response = await dio.get(
+        '/v2/top-headlines',
+        queryParameters: {
+          'country': 'id',
+          'apiKey': constantConfig.apiKeyNewsApi,
+          'category': category,
+        },
+      );
+    }
     if (response.statusCode == 200) {
       return TopHeadlinesNewsResponseModel.fromJson(response.data);
     } else {
