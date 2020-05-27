@@ -6,7 +6,7 @@ void main() {
     final tCategory = 'technology';
 
     test(
-      'make sure the props value is []',
+      'make sure the props value is [category]',
       () async {
         // assert
         expect(LoadTopHeadlinesNewsEvent(category: tCategory).props, [tCategory]);
@@ -20,6 +20,32 @@ void main() {
         expect(
           LoadTopHeadlinesNewsEvent(category: tCategory).toString(),
           'LoadTopHeadlinesNewsEvent{category: $tCategory}',
+        );
+      },
+    );
+  });
+
+  group('ChangeCategoryTopHeadlinesNews', () {
+    final tChangeCategoryTopHeadlinesNewsEvent = ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: 0);
+
+    test(
+      'make sure the props value is [indexCategorySelected]',
+      () async {
+        // assert
+        expect(
+          tChangeCategoryTopHeadlinesNewsEvent.props,
+          [tChangeCategoryTopHeadlinesNewsEvent.indexCategorySelected],
+        );
+      },
+    );
+
+    test(
+      'make sure the output of the toString function',
+      () async {
+        // assert
+        expect(
+          tChangeCategoryTopHeadlinesNewsEvent.toString(),
+          'ChangeCategoryTopHeadlinesNewsEvent{indexCategorySelected: ${tChangeCategoryTopHeadlinesNewsEvent.indexCategorySelected}}',
         );
       },
     );

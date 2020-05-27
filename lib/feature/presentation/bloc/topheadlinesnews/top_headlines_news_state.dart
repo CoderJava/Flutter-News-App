@@ -39,3 +39,17 @@ class FailureTopHeadlinesNewsState extends TopHeadlinesNewsState {
     return 'FailureTopHeadlinesNewsState{errorMessage: $errorMessage}';
   }
 }
+
+class ChangedCategoryTopHeadlinesNewsState extends TopHeadlinesNewsState {
+  final int indexCategorySelected;
+
+  ChangedCategoryTopHeadlinesNewsState({this.indexCategorySelected});
+
+  @override
+  List<Object> get props => [indexCategorySelected];
+
+  @override
+  String toString() {
+    return 'ChangedCategoryTopHeadlinesNewsState{indexCategorySelected: $indexCategorySelected}';
+  }
+}

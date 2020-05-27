@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     CategoryNewsModel(image: 'assets/images/img_entertainment.png', title: 'Entertainment'),
     CategoryNewsModel(image: 'assets/images/img_health.png', title: 'Health'),
     CategoryNewsModel(image: 'assets/images/img_science.png', title: 'Science'),
-    CategoryNewsModel(image: 'assets/images/img_sport.png', title: 'Sport'),
+    CategoryNewsModel(image: 'assets/images/img_sport.png', title: 'Sports'),
     CategoryNewsModel(image: 'assets/images/img_technology.png', title: 'Technology'),
   ];
   final refreshIndicatorState = GlobalKey<RefreshIndicatorState>();
@@ -66,6 +66,15 @@ class _HomePageState extends State<HomePage> {
               _resetRefreshIndicator();
             } else if (state is LoadedTopHeadlinesNewsState) {
               _resetRefreshIndicator();
+            } else if (state is ChangedCategoryTopHeadlinesNewsState) {
+              indexCategorySelected = state.indexCategorySelected;
+              if (Platform.isIOS) {
+                isLoadingCenterIOS = true;
+                var category = listCategories[indexCategorySelected].title.toLowerCase();
+                topHeadlinesNewsBloc.add(LoadTopHeadlinesNewsEvent(category: category));
+              } else {
+                refreshIndicatorState.currentState.show();
+              }
             }
           },
           child: Container(
@@ -101,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 WidgetDateToday(),
                 SizedBox(height: 24.h),
-                _buildWidgetListCategory(),
+                WidgetCategoryNews(listCategories: listCategories),
                 SizedBox(height: 24.h),
                 Expanded(
                   child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
@@ -181,6 +190,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildWidgetContentNewsAndroid() {
     return BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
       builder: (context, state) {
+        debugPrint('state: $state');
         var listArticles = <ItemArticleTopHeadlinesNewsResponseModel>[];
         if (state is LoadedTopHeadlinesNewsState) {
           listArticles.addAll(state.listArticles);
@@ -210,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                 itemCount: listArticles.length,
               ),
             ),
-            listArticles.isEmpty && state is! LoadingTopHeadlinesNewsState
+            listArticles.isEmpty && state is FailureTopHeadlinesNewsState
                 ? _buildWidgetFailureLoadData()
                 : Container(),
           ],
@@ -474,26 +484,50 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
 
-  Widget _buildWidgetListCategory() {
+class WidgetCategoryNews extends StatefulWidget {
+  final List<CategoryNewsModel> listCategories;
+
+  WidgetCategoryNews({@required this.listCategories});
+
+  @override
+  _WidgetCategoryNewsState createState() => _WidgetCategoryNewsState();
+}
+
+class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
+  int indexCategorySelected;
+
+  @override
+  void initState() {
+    indexCategorySelected = 0;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 100.h,
       child: ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 48.w),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          var itemCategory = listCategories[index];
+          var itemCategory = widget.listCategories[index];
           return Padding(
             padding: EdgeInsets.only(
               left: index == 0 ? 0 : 12.w,
-              right: index == listCategories.length - 1 ? 0 : 12.w,
+              right: index == widget.listCategories.length - 1 ? 0 : 12.w,
             ),
             child: GestureDetector(
               onTap: () {
-                // TODO: buat fitur pilih category
+                if (indexCategorySelected == index) {
+                  return;
+                }
                 setState(() {
                   indexCategorySelected = index;
                 });
+                var topHeadlinesNewsBloc = BlocProvider.of<TopHeadlinesNewsBloc>(context);
+                topHeadlinesNewsBloc.add(ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: indexCategorySelected));
               },
               child: Container(
                 child: AnimatedContainer(
@@ -508,9 +542,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     border: indexCategorySelected == index
                         ? Border.all(
-                            color: Colors.white,
-                            width: 2.0,
-                          )
+                      color: Colors.white,
+                      width: 2.0,
+                    )
                         : null,
                   ),
                   child: Center(
@@ -528,21 +562,22 @@ class _HomePageState extends State<HomePage> {
                   image: itemCategory.title.toLowerCase() == 'all'
                       ? null
                       : DecorationImage(
-                          image: AssetImage(
-                            itemCategory.image,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
+                    image: AssetImage(
+                      itemCategory.image,
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
           );
         },
-        itemCount: listCategories.length,
+        itemCount: widget.listCategories.length,
       ),
     );
   }
 }
+
 
 class WidgetDateToday extends StatefulWidget {
   @override

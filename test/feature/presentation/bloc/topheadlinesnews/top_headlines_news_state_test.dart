@@ -89,4 +89,30 @@ void main() {
       },
     );
   });
+
+  group('ChangedCategoryTopHeadlinesNewsState', () {
+    final tChangedCategoryTopHeadlinesNewsState = ChangedCategoryTopHeadlinesNewsState(indexCategorySelected: 1);
+
+    test(
+      'make sure the props value is [indexCategorySelected]',
+      () async {
+        // assert
+        expect(
+          tChangedCategoryTopHeadlinesNewsState.props,
+          [tChangedCategoryTopHeadlinesNewsState.indexCategorySelected],
+        );
+      },
+    );
+
+    test(
+      'make sure the output of the toString function',
+      () async {
+        // assert
+        expect(
+          tChangedCategoryTopHeadlinesNewsState.toString(),
+          'ChangedCategoryTopHeadlinesNewsState{indexCategorySelected: ${tChangedCategoryTopHeadlinesNewsState.indexCategorySelected}}',
+        );
+      },
+    );
+  });
 }

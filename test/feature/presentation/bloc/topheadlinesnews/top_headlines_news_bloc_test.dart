@@ -140,4 +140,20 @@ void main() {
           verify(mockGetTopHeadlinesNews(ParamsGetTopHeadlinesNews(category: tCategory))).called(1);
         });
   });
+
+  group('ChangeCategoryTopHeadlinesNews', () {
+    blocTest(
+      'make sure to emit [ChangedCategoryTopHeadlinesNewsState] when receive ChangeCategoryTopHeadlinesNewsEvent with '
+      'a successful process',
+      build: () async {
+        return topHeadlinesNewsBloc;
+      },
+      act: (bloc) {
+        return bloc.add(ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: 1));
+      },
+      expect: [
+        ChangedCategoryTopHeadlinesNewsState(indexCategorySelected: 1),
+      ],
+    );
+  });
 }
