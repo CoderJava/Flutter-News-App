@@ -36,6 +36,7 @@ void main() {
   });
 
   group('getTopHeadlinesNews', () {
+    final tCategory = 'technology';
     final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
       json.decode(
         fixture('top_headlines_news_response_model.json'),
@@ -66,13 +67,36 @@ void main() {
         setUpMockDioSuccess();
 
         // act
-        await newsRemoteDataSource.getTopHeadlinesNews();
+        await newsRemoteDataSource.getTopHeadlinesNews('all');
 
         // assert
         verify(
           mockDio.get(
             '/v2/top-headlines',
             queryParameters: {
+              'country': 'id',
+              'apiKey': constantConfig.apiKeyNewsApi,
+            },
+          ),
+        );
+      },
+    );
+
+    test(
+      'make sure there is a GET request to endpoint /v2/top-headlines?country=:country&apiKey=:apiKey&category=:category',
+      () async {
+        // arrange
+        setUpMockDioSuccess();
+
+        // act
+        await newsRemoteDataSource.getTopHeadlinesNews(tCategory);
+
+        // assert
+        verify(
+          mockDio.get(
+            '/v2/top-headlines',
+            queryParameters: {
+              'category': tCategory,
               'country': 'id',
               'apiKey': constantConfig.apiKeyNewsApi,
             },
@@ -89,7 +113,7 @@ void main() {
         setUpMockDioSuccess();
 
         // act
-        final result = await newsRemoteDataSource.getTopHeadlinesNews();
+        final result = await newsRemoteDataSource.getTopHeadlinesNews(tCategory);
 
         // assert
         expect(result, tTopHeadlinesNewsResponseModel);
@@ -107,7 +131,7 @@ void main() {
         when(mockDio.get(any, queryParameters: anyNamed('queryParameters'))).thenAnswer((_) async => response);
 
         // act
-        final call = newsRemoteDataSource.getTopHeadlinesNews();
+        final call = newsRemoteDataSource.getTopHeadlinesNews(tCategory);
 
         // assert
         expect(() => call, throwsA(TypeMatcher<DioError>()));

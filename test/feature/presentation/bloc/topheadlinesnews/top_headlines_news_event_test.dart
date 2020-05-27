@@ -3,11 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('LoadTopHeadlinesNews', () {
+    final tCategory = 'technology';
+
     test(
       'make sure the props value is []',
       () async {
         // assert
-        expect(LoadTopHeadlinesNewsEvent().props, []);
+        expect(LoadTopHeadlinesNewsEvent(category: tCategory).props, [tCategory]);
       },
     );
 
@@ -15,7 +17,10 @@ void main() {
       'make sure the output of the toString function',
       () async {
         // assert
-        expect(LoadTopHeadlinesNewsEvent().toString(), 'LoadTopHeadlinesNewsEvent');
+        expect(
+          LoadTopHeadlinesNewsEvent(category: tCategory).toString(),
+          'LoadTopHeadlinesNewsEvent{category: $tCategory}',
+        );
       },
     );
   });
