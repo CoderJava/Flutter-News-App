@@ -18,3 +18,17 @@ class LoadTopHeadlinesNewsEvent extends TopHeadlinesNewsEvent {
     return 'LoadTopHeadlinesNewsEvent{category: $category}';
   }
 }
+
+class ChangeCategoryTopHeadlinesNewsEvent extends TopHeadlinesNewsEvent {
+  final int indexCategorySelected;
+
+  ChangeCategoryTopHeadlinesNewsEvent({@required this.indexCategorySelected});
+
+  @override
+  List<Object> get props => [indexCategorySelected];
+
+  @override
+  String toString() {
+    return 'ChangeCategoryTopHeadlinesNewsEvent{indexCategorySelected: $indexCategorySelected}';
+  }
+}

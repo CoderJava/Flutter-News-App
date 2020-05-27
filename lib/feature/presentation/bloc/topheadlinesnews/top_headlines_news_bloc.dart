@@ -21,6 +21,8 @@ class TopHeadlinesNewsBloc extends Bloc<TopHeadlinesNewsEvent, TopHeadlinesNewsS
   ) async* {
     if (event is LoadTopHeadlinesNewsEvent) {
       yield* _mapLoadTopHeadlinesNewsEventToState(event);
+    } else if (event is ChangeCategoryTopHeadlinesNewsEvent) {
+      yield* _mapChangeCategoryTopHeadlinesNewsEventToState(event);
     }
   }
 
@@ -38,5 +40,11 @@ class TopHeadlinesNewsBloc extends Bloc<TopHeadlinesNewsEvent, TopHeadlinesNewsS
       },
       (data) => LoadedTopHeadlinesNewsState(listArticles: data.articles),
     );
+  }
+
+  Stream<TopHeadlinesNewsState> _mapChangeCategoryTopHeadlinesNewsEventToState(
+    ChangeCategoryTopHeadlinesNewsEvent event,
+  ) async* {
+    yield ChangedCategoryTopHeadlinesNewsState(indexCategorySelected: event.indexCategorySelected);
   }
 }
