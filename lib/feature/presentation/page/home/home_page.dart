@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,7 @@ import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlin
 import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
 import 'package:flutter_news_app/injection_container.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,13 +29,25 @@ class _HomePageState extends State<HomePage> {
     CategoryNewsModel(image: 'assets/images/img_sport.png', title: 'Sport'),
     CategoryNewsModel(image: 'assets/images/img_technology.png', title: 'Technology'),
   ];
+  final refreshIndicatorState = GlobalKey<RefreshIndicatorState>();
+
+  bool isLoadingCenterIOS = false;
+  Completer completerRefresh;
   var indexCategorySelected = 0;
 
   @override
   void initState() {
-    topHeadlinesNewsBloc.add(
-      LoadTopHeadlinesNewsEvent(category: listCategories[indexCategorySelected].title.toLowerCase()),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Platform.isIOS) {
+        isLoadingCenterIOS = true;
+        topHeadlinesNewsBloc.add(
+          LoadTopHeadlinesNewsEvent(category: listCategories[indexCategorySelected].title.toLowerCase()),
+        );
+      } else {
+        completerRefresh = Completer();
+        refreshIndicatorState.currentState.show();
+      }
+    });
     super.initState();
   }
 
@@ -46,7 +62,11 @@ class _HomePageState extends State<HomePage> {
         create: (context) => topHeadlinesNewsBloc,
         child: BlocListener<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
           listener: (context, state) {
-            // TODO: handle listener state yang diperlukan
+            if (state is FailureTopHeadlinesNewsState) {
+              _resetRefreshIndicator();
+            } else if (state is LoadedTopHeadlinesNewsState) {
+              _resetRefreshIndicator();
+            }
           },
           child: Container(
             width: double.infinity,
@@ -84,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                 _buildWidgetListCategory(),
                 SizedBox(height: 24.h),
                 Expanded(
-                  child: _buildWidgetContentNews(),
+                  child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
                 ),
                 SizedBox(height: paddingBottom),
               ],
@@ -95,43 +115,163 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildWidgetContentNews() {
+  void _resetRefreshIndicator() {
+    if (isLoadingCenterIOS) {
+      isLoadingCenterIOS = false;
+    }
+    completerRefresh?.complete();
+    completerRefresh = Completer();
+  }
+
+  Widget _buildWidgetContentNewsIOS() {
     return BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
       builder: (context, state) {
-        if (state is LoadingTopHeadlinesNewsState) {
+        var listArticles = <ItemArticleTopHeadlinesNewsResponseModel>[];
+        if (state is LoadedTopHeadlinesNewsState) {
+          listArticles.addAll(state.listArticles);
+        } else if (isLoadingCenterIOS) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CupertinoActivityIndicator(),
           );
-        } else if (state is FailureTopHeadlinesNewsState) {
-          return Center(
-            child: Text(state.errorMessage),
-          );
-        } else if (state is LoadedTopHeadlinesNewsState) {
-          var listArticles = state.listArticles;
-          return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 48.w),
-            itemBuilder: (context, index) {
-              var itemArticle = listArticles[index];
-              var dateTimePublishedAt = DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
-              var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
-              if (index == 0) {
-                return _buildWidgetItemLatestNews(itemArticle, strPublishedAt);
+        }
+        return Stack(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 48.w),
+              child: CustomScrollView(
+                physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                slivers: <Widget>[
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () {
+                      topHeadlinesNewsBloc.add(
+                        LoadTopHeadlinesNewsEvent(category: listCategories[indexCategorySelected].title.toLowerCase()),
+                      );
+                      return completerRefresh.future;
+                    },
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        var itemArticle = listArticles[index];
+                        var dateTimePublishedAt = DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
+                        var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
+                        if (index == 0) {
+                          return _buildWidgetItemLatestNews(itemArticle, strPublishedAt);
+                        } else {
+                          return _buildWidgetItemNews(index, itemArticle, strPublishedAt);
+                        }
+                      },
+                      childCount: listArticles.length,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            listArticles.isEmpty && state is! LoadingTopHeadlinesNewsState
+                ? _buildWidgetFailureLoadData()
+                : Container(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildWidgetContentNewsAndroid() {
+    return BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
+      builder: (context, state) {
+        var listArticles = <ItemArticleTopHeadlinesNewsResponseModel>[];
+        if (state is LoadedTopHeadlinesNewsState) {
+          listArticles.addAll(state.listArticles);
+        }
+        return Stack(
+          children: <Widget>[
+            RefreshIndicator(
+              key: refreshIndicatorState,
+              onRefresh: () {
+                topHeadlinesNewsBloc.add(
+                  LoadTopHeadlinesNewsEvent(category: listCategories[indexCategorySelected].title.toLowerCase()),
+                );
+                return completerRefresh.future;
+              },
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 48.w),
+                itemBuilder: (context, index) {
+                  var itemArticle = listArticles[index];
+                  var dateTimePublishedAt = DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
+                  var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
+                  if (index == 0) {
+                    return _buildWidgetItemLatestNews(itemArticle, strPublishedAt);
+                  } else {
+                    return _buildWidgetItemNews(index, itemArticle, strPublishedAt);
+                  }
+                },
+                itemCount: listArticles.length,
+              ),
+            ),
+            listArticles.isEmpty && state is! LoadingTopHeadlinesNewsState
+                ? _buildWidgetFailureLoadData()
+                : Container(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildWidgetFailureLoadData() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SvgPicture.asset(
+            'assets/svg/undraw_newspaper.svg',
+            width: ScreenUtil.screenWidthDp / 3,
+            height: ScreenUtil.screenWidthDp / 3,
+          ),
+          SizedBox(height: 24.h),
+          Text(
+            'You seem to be offline',
+            style: TextStyle(
+              fontSize: 48.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            'Check your wi-fi connection or cellular data \nand try again.',
+            style: TextStyle(
+              fontSize: 36.sp,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          RaisedButton(
+            onPressed: () {
+              if (Platform.isIOS) {
+                isLoadingCenterIOS = true;
+                topHeadlinesNewsBloc.add(
+                  LoadTopHeadlinesNewsEvent(category: listCategories[indexCategorySelected].title.toLowerCase()),
+                );
               } else {
-                return _buildWidgetItemNews(index, itemArticle, strPublishedAt);
+                refreshIndicatorState.currentState.show();
               }
             },
-            itemCount: listArticles.length,
-          );
-        } else {
-          return Container();
-        }
-      },
+            child: Text(
+              'Try Again'.toUpperCase(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 36.sp,
+              ),
+            ),
+            color: Colors.grey[700],
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildWidgetItemNews(
     int index,
-    ItemArticleTopHeadlinesNewsResponseModel itemArticleTopHeadlinesNewsResponseModel,
+    ItemArticleTopHeadlinesNewsResponseModel itemArticle,
     String strPublishedAt,
   ) {
     return Padding(
@@ -147,7 +287,7 @@ class _HomePageState extends State<HomePage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: CachedNetworkImage(
-                imageUrl: itemArticleTopHeadlinesNewsResponseModel.urlToImage,
+                imageUrl: itemArticle.urlToImage,
                 fit: BoxFit.cover,
                 width: 200.w,
                 height: 200.w,
@@ -182,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      itemArticleTopHeadlinesNewsResponseModel.title,
+                      itemArticle.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -190,10 +330,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  itemArticleTopHeadlinesNewsResponseModel.author == null
+                  itemArticle.author == null
                       ? Container()
                       : Text(
-                          itemArticleTopHeadlinesNewsResponseModel.author,
+                          itemArticle.author,
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 28.sp,
@@ -217,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        itemArticleTopHeadlinesNewsResponseModel.source.name,
+                        itemArticle.source.name,
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 24.sp,
