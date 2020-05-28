@@ -15,6 +15,7 @@ void main() {
   SearchTopHeadlinesNews searchTopHeadlinesNews;
   MockNewsRepository mockNewsRepository;
   final tKeyword = 'testKeyword';
+  final tParamsSearchTopHeadlinesNews = ParamsSearchTopHeadlinesNews(keyword: tKeyword);
 
   setUp(() {
     mockNewsRepository = MockNewsRepository();
@@ -35,7 +36,7 @@ void main() {
           .thenAnswer((_) async => Right(tTopHeadlinesNewsResponseModel));
 
       // act
-      final result = await searchTopHeadlinesNews(ParamsSearchTopHeadlinesNews(keyword: tKeyword));
+      final result = await searchTopHeadlinesNews(tParamsSearchTopHeadlinesNews);
 
       // assert
       expect(result, Right(tTopHeadlinesNewsResponseModel));
@@ -45,10 +46,20 @@ void main() {
   );
 
   test(
+    'make sure the props value',
+    () async {
+      // assert
+      expect(
+        tParamsSearchTopHeadlinesNews.props,
+        [tParamsSearchTopHeadlinesNews.keyword],
+      );
+    },
+  );
+
+  test(
     'make sure the output of the toString function',
     () async {
       // assert
-      final tParamsSearchTopHeadlinesNews = ParamsSearchTopHeadlinesNews(keyword: tKeyword);
       expect(
         tParamsSearchTopHeadlinesNews.toString(),
         'ParamsSearchTopHeadlinesNews{keyword: ${tParamsSearchTopHeadlinesNews.keyword}}',
