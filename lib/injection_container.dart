@@ -8,6 +8,7 @@ import 'package:flutter_news_app/feature/data/datasource/news/news_remote_data_s
 import 'package:flutter_news_app/feature/data/repository/news/news_repository_impl.dart';
 import 'package:flutter_news_app/feature/domain/repository/news/news_repository.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
+import 'package:flutter_news_app/feature/domain/usecase/searchtopheadlinesnews/search_top_headlines_news.dart';
 import 'package:get_it/get_it.dart';
 
 import 'feature/presentation/bloc/topheadlinesnews/bloc.dart';
@@ -19,10 +20,16 @@ Future<void> init() async {
    * ! Features
    */
   // Bloc
-  sl.registerFactory(() => TopHeadlinesNewsBloc(getTopHeadlinesNews: sl()));
+  sl.registerFactory(
+    () => TopHeadlinesNewsBloc(
+      getTopHeadlinesNews: sl(),
+      searchTopHeadlinesNews: sl(),
+    ),
+  );
 
   // Use Case
   sl.registerLazySingleton(() => GetTopHeadlinesNews(newsRepository: sl()));
+  sl.registerLazySingleton(() => SearchTopHeadlinesNews(newsRepository: sl()));
 
   // Repository
   sl.registerLazySingleton<NewsRepository>(() => NewsRepositoryImpl(newsRemoteDataSource: sl(), networkInfo: sl()));
