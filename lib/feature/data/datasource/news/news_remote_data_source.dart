@@ -32,7 +32,7 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
         '/v2/top-headlines',
         queryParameters: {
           'country': 'id',
-          'apiKey': constantConfig.apiKeyNewsApi,
+          'apiKey': constantConfig.keyNewsApi,
         },
       );
     } else {
@@ -40,7 +40,7 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
         '/v2/top-headlines',
         queryParameters: {
           'country': 'id',
-          'apiKey': constantConfig.apiKeyNewsApi,
+          'apiKey': constantConfig.keyNewsApi,
           'category': category,
         },
       );
@@ -58,7 +58,7 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
       '/v2/top-headlines',
       queryParameters: {
         'country': 'id',
-        'apiKey': constantConfig.apiKeyNewsApi,
+        'apiKey': constantConfig.keyNewsApi,
         'q': keyword,
       },
     );

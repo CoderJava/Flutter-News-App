@@ -75,7 +75,7 @@ void main() {
             '/v2/top-headlines',
             queryParameters: {
               'country': 'id',
-              'apiKey': constantConfig.apiKeyNewsApi,
+              'apiKey': constantConfig.keyNewsApi,
             },
           ),
         );
@@ -98,7 +98,7 @@ void main() {
             queryParameters: {
               'category': tCategory,
               'country': 'id',
-              'apiKey': constantConfig.apiKeyNewsApi,
+              'apiKey': constantConfig.keyNewsApi,
             },
           ),
         );
@@ -174,7 +174,7 @@ void main() {
             '/v2/top-headlines',
             queryParameters: {
               'country': 'id',
-              'apiKey': constantConfig.apiKeyNewsApi,
+              'apiKey': constantConfig.keyNewsApi,
               'q': tKeyword,
             },
           ),
