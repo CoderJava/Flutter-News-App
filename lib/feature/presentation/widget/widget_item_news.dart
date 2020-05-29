@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlines_news_response_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WidgetItemNews extends StatelessWidget {
   final ItemArticleTopHeadlinesNewsResponseModel itemArticle;
@@ -16,8 +17,14 @@ class WidgetItemNews extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
     return GestureDetector(
-      onTap: () {
-        // TODO: buat fitur arahkan ke website detail berita
+      onTap: () async {
+        if (await canLaunch(itemArticle.url)) {
+          await launch(itemArticle.url);
+        } else {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('Couldn\'t open detail news'),
+          ));
+        }
       },
       child: SizedBox(
         height: 200.w,

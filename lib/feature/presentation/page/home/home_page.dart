@@ -13,6 +13,7 @@ import 'package:flutter_news_app/feature/presentation/widget/widget_item_news.da
 import 'package:flutter_news_app/injection_container.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -55,9 +56,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    var mediaQueryData = MediaQuery.of(context);
-    var paddingTop = mediaQueryData.padding.top;
-    var paddingBottom = mediaQueryData.padding.bottom;
     return Scaffold(
       body: BlocProvider<TopHeadlinesNewsBloc>(
         create: (context) => topHeadlinesNewsBloc,
@@ -78,53 +76,62 @@ class _HomePageState extends State<HomePage> {
               }
             }
           },
-          child: Container(
-            width: double.infinity,
-            color: Color(0xFFEFF5F5),
-            padding: EdgeInsets.symmetric(
-              vertical: 24.h,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: paddingTop),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 48.w),
-                  child: Row(
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Color(0xFFEFF5F5),
+              ),
+              SafeArea(
+                child: Container(
+                  width: double.infinity,
+                  color: Color(0xFFEFF5F5),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 24.h,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          'Daily News',
-                          style: TextStyle(
-                            fontSize: 48.sp,
-                          ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 48.w),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                'Daily News',
+                                style: TextStyle(
+                                  fontSize: 48.sp,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SearchPage()),
+                                );
+                              },
+                              child: Hero(
+                                tag: 'iconSearch',
+                                child: Icon(Icons.search),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SearchPage()),
-                          );
-                        },
-                        child: Hero(
-                          tag: 'iconSearch',
-                          child: Icon(Icons.search),
-                        ),
+                      WidgetDateToday(),
+                      SizedBox(height: 24.h),
+                      WidgetCategoryNews(listCategories: listCategories),
+                      SizedBox(height: 24.h),
+                      Expanded(
+                        child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
                       ),
                     ],
                   ),
                 ),
-                WidgetDateToday(),
-                SizedBox(height: 24.h),
-                WidgetCategoryNews(listCategories: listCategories),
-                SizedBox(height: 24.h),
-                Expanded(
-                  child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
-                ),
-                SizedBox(height: paddingBottom),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -287,12 +294,18 @@ class _HomePageState extends State<HomePage> {
     String strPublishedAt,
   ) {
     return GestureDetector(
-      onTap: () {
-        // TODO: buat fitur arahkan ke website detail berita
+      onTap: () async {
+        if (await canLaunch(itemArticle.url)) {
+          await launch(itemArticle.url);
+        } else {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('Couldn\'t open detail news'),
+          ));
+        }
       },
       child: Container(
         width: double.infinity,
-        height: ScreenUtil.screenHeightDp / 3,
+        height: ScreenUtil.screenWidthDp / 1.7,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
           image: DecorationImage(
@@ -306,7 +319,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             Container(
               width: double.infinity,
-              height: ScreenUtil.screenHeightDp / 3,
+              height: ScreenUtil.screenWidthDp / 1.7,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 gradient: LinearGradient(
