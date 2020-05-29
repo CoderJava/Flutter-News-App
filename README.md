@@ -5,6 +5,9 @@
 # Flutter News App
 News App developed with Flutter and API from [News API](https://newsapi.org)
 
+## Older Version
+For Flutter News App version 1.0.0, you can check this [repository](https://github.com/CoderJava/Flutter-News-App/tree/v1.0.0).
+
 ## Usage
 1. Please open file **constant_config.dart** and change `YOUR API KEY` in the variable `keyNewsApi` with your own.
 2. Build flavor only work for Android. So, if you want to run as development mode you can use this command.
