@@ -31,9 +31,6 @@ dependencies:
   # error widgets.
   cached_network_image: ^2.1.0+1
 
-  # A network inspector for Flutter on Android using the Chrome Dev Tools
-  flutter_stetho: ^0.5.2
-
   # Simple direct Service Locator that allows to decouple the interface from a concrete
   # implementation and to access the concrete implementation from everywhere in your App
   get_it: ^4.0.1

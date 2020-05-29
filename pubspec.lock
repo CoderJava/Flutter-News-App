@@ -272,13 +272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  flutter_stetho:
-    dependency: "direct main"
-    description:
-      name: flutter_stetho
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.2"
   flutter_svg:
     dependency: "direct main"
     description:
