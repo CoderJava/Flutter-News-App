@@ -71,7 +71,7 @@ dev_dependencies:
   # A mock framework inspired by Mockito.
   mockito: ^4.1.1
 
-  # A testing library whic makes it easy to test blocs.
+  # A testing library which makes it easy to test blocs.
   bloc_test: ^4.0.0
 
   # Automatically generate code for converting to and from JSON by annotating Dart classes.
