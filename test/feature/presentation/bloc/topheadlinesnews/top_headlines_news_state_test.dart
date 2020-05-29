@@ -115,4 +115,36 @@ void main() {
       },
     );
   });
+
+  group('SearchSuccessTopHeadlinesNewsState', () {
+    final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
+      json.decode(
+        fixture('top_headlines_news_response_model.json'),
+      ),
+    );
+    final tListArticles = tTopHeadlinesNewsResponseModel.articles;
+    final tSearchSuccessTopHeadlinesNewsState = SearchSuccessTopHeadlinesNewsState(listArticles: tListArticles);
+
+    test(
+      'make sure the props value is [listArticles]',
+      () async {
+        // assert
+        expect(
+          tSearchSuccessTopHeadlinesNewsState.props,
+          [tSearchSuccessTopHeadlinesNewsState.listArticles],
+        );
+      },
+    );
+
+    test(
+      'make sure the output of the toString function',
+      () async {
+        // assert
+        expect(
+          tSearchSuccessTopHeadlinesNewsState.toString(),
+          'SearchSuccessTopHeadlinesNewsState{listArticles: ${tSearchSuccessTopHeadlinesNewsState.listArticles}}',
+        );
+      },
+    );
+  });
 }

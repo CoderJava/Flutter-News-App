@@ -53,3 +53,17 @@ class ChangedCategoryTopHeadlinesNewsState extends TopHeadlinesNewsState {
     return 'ChangedCategoryTopHeadlinesNewsState{indexCategorySelected: $indexCategorySelected}';
   }
 }
+
+class SearchSuccessTopHeadlinesNewsState extends TopHeadlinesNewsState {
+  final List<ItemArticleTopHeadlinesNewsResponseModel> listArticles;
+
+  SearchSuccessTopHeadlinesNewsState({this.listArticles});
+
+  @override
+  List<Object> get props => [listArticles];
+
+  @override
+  String toString() {
+    return 'SearchSuccessTopHeadlinesNewsState{listArticles: $listArticles}';
+  }
+}

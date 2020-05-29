@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_news_app/core/error/failure.dart';
 import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlines_news_response_model.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
+import 'package:flutter_news_app/feature/domain/usecase/searchtopheadlinesnews/search_top_headlines_news.dart';
 import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -13,13 +14,20 @@ import '../../../../fixture/fixture_reader.dart';
 
 class MockGetTopHeadlinesNews extends Mock implements GetTopHeadlinesNews {}
 
+class MockSearchTopHeadlinesNews extends Mock implements SearchTopHeadlinesNews {}
+
 void main() {
   MockGetTopHeadlinesNews mockGetTopHeadlinesNews;
+  MockSearchTopHeadlinesNews mockSearchTopHeadlinesNews;
   TopHeadlinesNewsBloc topHeadlinesNewsBloc;
 
   setUp(() {
     mockGetTopHeadlinesNews = MockGetTopHeadlinesNews();
-    topHeadlinesNewsBloc = TopHeadlinesNewsBloc(getTopHeadlinesNews: mockGetTopHeadlinesNews);
+    mockSearchTopHeadlinesNews = MockSearchTopHeadlinesNews();
+    topHeadlinesNewsBloc = TopHeadlinesNewsBloc(
+      getTopHeadlinesNews: mockGetTopHeadlinesNews,
+      searchTopHeadlinesNews: mockSearchTopHeadlinesNews,
+    );
   });
 
   tearDown(() {
@@ -30,7 +38,20 @@ void main() {
     'make sure that AssertionError will be called when accepting null arguments',
     () async {
       // assert
-      expect(() => TopHeadlinesNewsBloc(getTopHeadlinesNews: null), throwsAssertionError);
+      expect(
+        () => TopHeadlinesNewsBloc(
+          getTopHeadlinesNews: null,
+          searchTopHeadlinesNews: mockSearchTopHeadlinesNews,
+        ),
+        throwsAssertionError,
+      );
+      expect(
+        () => TopHeadlinesNewsBloc(
+          getTopHeadlinesNews: mockGetTopHeadlinesNews,
+          searchTopHeadlinesNews: null,
+        ),
+        throwsAssertionError,
+      );
     },
   );
 
@@ -154,6 +175,87 @@ void main() {
       expect: [
         ChangedCategoryTopHeadlinesNewsState(indexCategorySelected: 1),
       ],
+    );
+  });
+
+  group('SearchTopHeadlinesNews', () {
+    final tKeyword = 'testKeyword';
+    final tTopHeadlinesNewsResponseModel = TopHeadlinesNewsResponseModel.fromJson(
+      json.decode(
+        fixture('top_headlines_news_response_model.json'),
+      ),
+    );
+
+    test(
+      'make sure that the SearchTopHeadlinesNews use case is really called',
+      () async {
+        // arrange
+        when(mockSearchTopHeadlinesNews(any)).thenAnswer((_) async => Right(tTopHeadlinesNewsResponseModel));
+
+        // act
+        topHeadlinesNewsBloc.add(SearchTopHeadlinesNewsEvent(keyword: tKeyword));
+        await untilCalled(mockSearchTopHeadlinesNews(any));
+
+        // assert
+        verify(mockSearchTopHeadlinesNews(ParamsSearchTopHeadlinesNews(keyword: tKeyword)));
+      },
+    );
+
+    blocTest(
+      'make sure to emit [LoadingTopHeadlinesNewsState, SearchSuccessTopHeadlinesNewsState] when receive '
+      'SearchTopHeadlinesNewsEvent with a successful process',
+      build: () async {
+        when(mockSearchTopHeadlinesNews(any)).thenAnswer((_) async => Right(tTopHeadlinesNewsResponseModel));
+        return topHeadlinesNewsBloc;
+      },
+      act: (bloc) {
+        return bloc.add(SearchTopHeadlinesNewsEvent(keyword: tKeyword));
+      },
+      expect: [
+        LoadingTopHeadlinesNewsState(),
+        SearchSuccessTopHeadlinesNewsState(listArticles: tTopHeadlinesNewsResponseModel.articles),
+      ],
+      verify: (_) async {
+        verify(mockSearchTopHeadlinesNews(ParamsSearchTopHeadlinesNews(keyword: tKeyword)));
+      },
+    );
+
+    blocTest(
+      'make sure to emit [LoadingTopHeadlinesNewsState, FailureTopHeadlinesNewsState] when receive '
+      'SearchTopHeadlinesNewsEvent with a failed process from endpoint',
+      build: () async {
+        when(mockSearchTopHeadlinesNews(any)).thenAnswer((_) async => Left(ServerFailure('testErrorMessage')));
+        return topHeadlinesNewsBloc;
+      },
+      act: (bloc) {
+        return bloc.add(SearchTopHeadlinesNewsEvent(keyword: tKeyword));
+      },
+      expect: [
+        LoadingTopHeadlinesNewsState(),
+        FailureTopHeadlinesNewsState(errorMessage: 'testErrorMessage'),
+      ],
+      verify: (_) async {
+        verify(mockSearchTopHeadlinesNews(ParamsSearchTopHeadlinesNews(keyword: tKeyword)));
+      },
+    );
+
+    blocTest(
+      'make sure to emit [LoadingTopHeadlinesNewsState, FailureTopHeadlinesNewsState] when the internet '
+          'connection has a problem',
+      build: () async {
+        when(mockSearchTopHeadlinesNews(any)).thenAnswer((_) async => Left(ConnectionFailure()));
+        return topHeadlinesNewsBloc;
+      },
+      act: (bloc) {
+        return bloc.add(SearchTopHeadlinesNewsEvent(keyword: tKeyword));
+      },
+      expect: [
+        LoadingTopHeadlinesNewsState(),
+        FailureTopHeadlinesNewsState(errorMessage: messageConnectionFailure),
+      ],
+      verify: (_) async {
+        verify(mockSearchTopHeadlinesNews(ParamsSearchTopHeadlinesNews(keyword: tKeyword)));
+      },
     );
   });
 }
