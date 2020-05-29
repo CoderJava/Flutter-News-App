@@ -10,7 +10,8 @@ For Flutter News App version 1.0.0, you can check this [repository](https://gith
 
 ## Usage
 1. Please open file **constant_config.dart** and change `YOUR API KEY` in the variable `keyNewsApi` with your own.
-2. Build flavor only work for Android. So, if you want to run as development mode you can use this command.
+2. In development mode, I'm used fake json server. So, the data is not realtime. 
+3. Build flavor only work for Android. So, if you want to run as development mode you can use this command.
 ```
 flutter run -t lib/main_development.dart --flavor development -d <device_id>
 ```
@@ -22,7 +23,7 @@ flutter run --release -t lib/main_production.dart --flavor production -d <device
 ```
 flutter build appbundle --release --flavor production -t lib/main_production.dart
 ```
-3. For iOS, you can use this command as development mode.
+4. For iOS, you can use this command as development mode.
 ```
 flutter run -t lib/main_development.dart -d <device_id>
 ```
