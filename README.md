@@ -29,6 +29,13 @@ flutter run --release -t lib/main_production.dart -d <device_id>
 ```
 For iOS, to build and release there is no configuration. Just follow the instructions from the [documentation](https://flutter.dev/docs/deployment/ios).
 
+## Feature
+- [X] List daily news.
+- [X] Filter daily news by category.
+- [X] Refresh list daily news with pull to refresh style.
+- [X] Go to detail news website.
+- [X] Search news.
+
 ## Technology
 1. Dio<br />
 A powerful Http client for Dart, which supports interceptors, FormData, Request Cancellation, File Downloading, Timeout, etc.
