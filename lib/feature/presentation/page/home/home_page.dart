@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news_app/feature/data/model/categorynews/category_news_model.dart';
 import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlines_news_response_model.dart';
 import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
+import 'package:flutter_news_app/feature/presentation/page/search/search_page.dart';
+import 'package:flutter_news_app/feature/presentation/widget/widget_failure_message.dart';
+import 'package:flutter_news_app/feature/presentation/widget/widget_item_news.dart';
 import 'package:flutter_news_app/injection_container.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -101,9 +102,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // TODO: buat fitur pencarian
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SearchPage()),
+                          );
                         },
-                        child: Icon(Icons.search),
+                        child: Hero(
+                          tag: 'iconSearch',
+                          child: Icon(Icons.search),
+                        ),
                       ),
                     ],
                   ),
@@ -164,7 +171,8 @@ class _HomePageState extends State<HomePage> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         var itemArticle = listArticles[index];
-                        var dateTimePublishedAt = DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
+                        var dateTimePublishedAt =
+                            DateFormat('yyyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
                         var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
                         if (index == 0) {
                           return _buildWidgetItemLatestNews(itemArticle, strPublishedAt);
@@ -190,7 +198,6 @@ class _HomePageState extends State<HomePage> {
   Widget _buildWidgetContentNewsAndroid() {
     return BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
       builder: (context, state) {
-        debugPrint('state: $state');
         var listArticles = <ItemArticleTopHeadlinesNewsResponseModel>[];
         if (state is LoadedTopHeadlinesNewsState) {
           listArticles.addAll(state.listArticles);
@@ -220,9 +227,7 @@ class _HomePageState extends State<HomePage> {
                 itemCount: listArticles.length,
               ),
             ),
-            listArticles.isEmpty && state is FailureTopHeadlinesNewsState
-                ? _buildWidgetFailureLoadData()
-                : Container(),
+            listArticles.isEmpty && state is FailureTopHeadlinesNewsState ? _buildWidgetFailureLoadData() : Container(),
           ],
         );
       },
@@ -234,26 +239,7 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SvgPicture.asset(
-            'assets/svg/undraw_newspaper.svg',
-            width: ScreenUtil.screenWidthDp / 3,
-            height: ScreenUtil.screenWidthDp / 3,
-          ),
-          SizedBox(height: 24.h),
-          Text(
-            'You seem to be offline',
-            style: TextStyle(
-              fontSize: 48.sp,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Text(
-            'Check your wi-fi connection or cellular data \nand try again.',
-            style: TextStyle(
-              fontSize: 36.sp,
-            ),
-            textAlign: TextAlign.center,
-          ),
+          WidgetFailureMessage(),
           RaisedButton(
             onPressed: () {
               if (Platform.isIOS) {
@@ -289,66 +275,84 @@ class _HomePageState extends State<HomePage> {
         top: index == 1 ? 32.h : 16.h,
         bottom: 16.h,
       ),
-      child: SizedBox(
-        height: 200.w,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: CachedNetworkImage(
-                imageUrl: itemArticle.urlToImage,
-                fit: BoxFit.cover,
-                width: 200.w,
-                height: 200.w,
-                errorWidget: (context, url, error) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      'assets/images/img_not_found.jpg',
-                      fit: BoxFit.cover,
-                      width: 200.w,
-                      height: 200.w,
-                    ),
-                  );
-                },
-                placeholder: (context, url) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      'assets/images/img_placeholder.jpg',
-                      fit: BoxFit.cover,
-                      width: 200.w,
-                      height: 200.w,
-                    ),
-                  );
-                },
-              ),
+      child: WidgetItemNews(
+        itemArticle: itemArticle,
+        strPublishedAt: strPublishedAt,
+      ),
+    );
+  }
+
+  Widget _buildWidgetItemLatestNews(
+    ItemArticleTopHeadlinesNewsResponseModel itemArticle,
+    String strPublishedAt,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: buat fitur arahkan ke website detail berita
+      },
+      child: Container(
+        width: double.infinity,
+        height: ScreenUtil.screenHeightDp / 3,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          image: DecorationImage(
+            image: NetworkImage(
+              itemArticle.urlToImage,
             ),
-            SizedBox(width: 24.w),
-            Expanded(
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              height: ScreenUtil.screenHeightDp / 3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.black,
+                    Colors.black.withOpacity(0.0),
+                  ],
+                  stops: [
+                    0.0,
+                    1.0,
+                  ],
+                ),
+              ),
+              padding: EdgeInsets.all(48.w),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.pink,
+                      borderRadius: BorderRadius.circular(48),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 28.w,
+                      vertical: 14.w,
+                    ),
                     child: Text(
-                      itemArticle.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      'Latest News',
                       style: TextStyle(
-                        fontSize: 36.sp,
+                        color: Colors.white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  itemArticle.author == null
-                      ? Container()
-                      : Text(
-                          itemArticle.author,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 28.sp,
-                          ),
-                        ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    itemArticle.title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 42.sp,
+                    ),
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
@@ -380,107 +384,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildWidgetItemLatestNews(
-    ItemArticleTopHeadlinesNewsResponseModel itemArticle,
-    String strPublishedAt,
-  ) {
-    return Container(
-      width: double.infinity,
-      height: ScreenUtil.screenHeightDp / 3,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        image: DecorationImage(
-          image: NetworkImage(
-            itemArticle.urlToImage,
-          ),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: ScreenUtil.screenHeightDp / 3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black,
-                  Colors.black.withOpacity(0.0),
-                ],
-                stops: [
-                  0.0,
-                  1.0,
-                ],
-              ),
-            ),
-            padding: EdgeInsets.all(48.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: BorderRadius.circular(48),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 28.w,
-                    vertical: 14.w,
-                  ),
-                  child: Text(
-                    'Latest News',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  itemArticle.title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 42.sp,
-                  ),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      strPublishedAt,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 24.sp,
-                      ),
-                    ),
-                    Text(
-                      ' | ',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 28.sp,
-                      ),
-                    ),
-                    Text(
-                      itemArticle.source.name,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 24.sp,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -527,7 +430,8 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
                   indexCategorySelected = index;
                 });
                 var topHeadlinesNewsBloc = BlocProvider.of<TopHeadlinesNewsBloc>(context);
-                topHeadlinesNewsBloc.add(ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: indexCategorySelected));
+                topHeadlinesNewsBloc
+                    .add(ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: indexCategorySelected));
               },
               child: Container(
                 child: AnimatedContainer(
@@ -542,9 +446,9 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
                     ),
                     border: indexCategorySelected == index
                         ? Border.all(
-                      color: Colors.white,
-                      width: 2.0,
-                    )
+                            color: Colors.white,
+                            width: 2.0,
+                          )
                         : null,
                   ),
                   child: Center(
@@ -562,11 +466,11 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
                   image: itemCategory.title.toLowerCase() == 'all'
                       ? null
                       : DecorationImage(
-                    image: AssetImage(
-                      itemCategory.image,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+                          image: AssetImage(
+                            itemCategory.image,
+                          ),
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
@@ -577,7 +481,6 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
     );
   }
 }
-
 
 class WidgetDateToday extends StatefulWidget {
   @override

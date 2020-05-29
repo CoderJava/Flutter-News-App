@@ -50,4 +50,31 @@ void main() {
       },
     );
   });
+
+  group('SearchTopHeadlinesNews', () {
+    final tKeyword = 'testKeyword';
+    final tSearchTopHeadlinesNewsEvent = SearchTopHeadlinesNewsEvent(keyword: tKeyword);
+
+    test(
+      'make sure the props value is [keyword]',
+      () async {
+        // assert
+        expect(
+          tSearchTopHeadlinesNewsEvent.props,
+          [tSearchTopHeadlinesNewsEvent.keyword],
+        );
+      },
+    );
+
+    test(
+      'make sure the output of the toString function',
+      () async {
+        // assert
+        expect(
+          tSearchTopHeadlinesNewsEvent.toString(),
+          'SearchTopHeadlinesNewsEvent{keyword: ${tSearchTopHeadlinesNewsEvent.keyword}}',
+        );
+      },
+    );
+  });
 }

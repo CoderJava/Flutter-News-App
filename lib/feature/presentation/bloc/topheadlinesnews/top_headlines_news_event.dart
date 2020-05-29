@@ -32,3 +32,17 @@ class ChangeCategoryTopHeadlinesNewsEvent extends TopHeadlinesNewsEvent {
     return 'ChangeCategoryTopHeadlinesNewsEvent{indexCategorySelected: $indexCategorySelected}';
   }
 }
+
+class SearchTopHeadlinesNewsEvent extends TopHeadlinesNewsEvent {
+  final String keyword;
+
+  SearchTopHeadlinesNewsEvent({@required this.keyword});
+
+  @override
+  List<Object> get props => [keyword];
+
+  @override
+  String toString() {
+    return 'SearchTopHeadlinesNewsEvent{keyword: $keyword}';
+  }
+}
