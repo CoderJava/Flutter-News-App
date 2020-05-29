@@ -32,7 +32,7 @@ For iOS, to build and release there is no configuration. Just follow the instruc
 ## Technology
 1. Dio<br />
 A powerful Http client for Dart, which supports interceptors, FormData, Request Cancellation, File Downloading, Timeout, etc.
-2. Flutter BLoC</br />
+2. Flutter BLoC<br />
 Flutter widgets that make it easy to implement the BLoC design pattern.
 3. Intl<br />
 Package providers internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
