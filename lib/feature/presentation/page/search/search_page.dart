@@ -42,119 +42,126 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    var mediaQueryData = MediaQuery.of(context);
-    var paddingTop = mediaQueryData.padding.top;
-    var paddingBottom = mediaQueryData.padding.bottom;
     return Scaffold(
       body: BlocProvider<TopHeadlinesNewsBloc>(
         create: (context) => topHeadlinesNewsBloc,
-        child: Container(
-          color: Color(0xFFEFF5F5),
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: 48.w,
-            vertical: 24.h,
-          ),
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: paddingTop),
-              Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-                    ),
-                  ),
-                  SizedBox(width: 24.w),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(99.0),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 36.w),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              controller: controllerKeyword,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                hintText: 'Searching something?',
-                                hintStyle: TextStyle(
-                                  fontSize: 36.sp,
-                                  color: Colors.grey,
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              style: TextStyle(
-                                fontSize: 36.sp,
-                              ),
-                            ),
-                          ),
-                          Hero(
-                            tag: 'iconSearch',
-                            child: Focus(
-                              focusNode: focusNodeIconSearch,
-                              child: Icon(
-                                Icons.search,
-                                size: 48.w,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              Expanded(
-                child: BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
-                  builder: (context, state) {
-                    if (state is LoadingTopHeadlinesNewsState) {
-                      return Center(
-                        child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
-                      );
-                    } else if (state is FailureTopHeadlinesNewsState) {
-                      return WidgetFailureMessage();
-                    } else if (state is SearchSuccessTopHeadlinesNewsState) {
-                      var listArticles = state.listArticles;
-                      if (listArticles.isEmpty) {
-                        return WidgetFailureMessage(
-                          errorTitle: 'Data not found',
-                          errorSubtitle: 'Hm, we couldn\'t find what you were looking for.',
-                        );
-                      } else {
-                        return ListView.builder(
-                          padding: EdgeInsets.only(bottom: paddingBottom),
-                          itemBuilder: (context, index) {
-                            var itemArticle = listArticles[index];
-                            var dateTimePublishedAt =
-                                DateFormat('yyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
-                            var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
-                              child: WidgetItemNews(
-                                itemArticle: itemArticle,
-                                strPublishedAt: strPublishedAt,
-                              ),
-                            );
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Color(0xFFEFF5F5),
+            ),
+            SafeArea(
+              child: Container(
+                color: Color(0xFFEFF5F5),
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  vertical: 24.h,
+                  horizontal: 48.w,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
-                          itemCount: listArticles.length,
-                        );
-                      }
-                    }
-                    return Container();
-                  },
+                          child: Icon(
+                            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                          ),
+                        ),
+                        SizedBox(width: 24.w),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(99.0),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 36.w),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    controller: controllerKeyword,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      hintText: 'Searching something?',
+                                      hintStyle: TextStyle(
+                                        fontSize: 36.sp,
+                                        color: Colors.grey,
+                                      ),
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 36.sp,
+                                    ),
+                                  ),
+                                ),
+                                Hero(
+                                  tag: 'iconSearch',
+                                  child: Focus(
+                                    focusNode: focusNodeIconSearch,
+                                    child: Icon(
+                                      Icons.search,
+                                      size: 48.w,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    Expanded(
+                      child: BlocBuilder<TopHeadlinesNewsBloc, TopHeadlinesNewsState>(
+                        builder: (context, state) {
+                          if (state is LoadingTopHeadlinesNewsState) {
+                            return Center(
+                              child: Platform.isIOS ? CupertinoActivityIndicator() : CircularProgressIndicator(),
+                            );
+                          } else if (state is FailureTopHeadlinesNewsState) {
+                            return WidgetFailureMessage();
+                          } else if (state is SearchSuccessTopHeadlinesNewsState) {
+                            var listArticles = state.listArticles;
+                            if (listArticles.isEmpty) {
+                              return WidgetFailureMessage(
+                                errorTitle: 'Data not found',
+                                errorSubtitle: 'Hm, we couldn\'t find what you were looking for.',
+                              );
+                            } else {
+                              return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemBuilder: (context, index) {
+                                  var itemArticle = listArticles[index];
+                                  var dateTimePublishedAt =
+                                      DateFormat('yyy-MM-ddTHH:mm:ssZ').parse(itemArticle.publishedAt, true);
+                                  var strPublishedAt = DateFormat('MMM dd, yyyy HH:mm').format(dateTimePublishedAt);
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                                    child: WidgetItemNews(
+                                      itemArticle: itemArticle,
+                                      strPublishedAt: strPublishedAt,
+                                    ),
+                                  );
+                                },
+                                itemCount: listArticles.length,
+                              );
+                            }
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
