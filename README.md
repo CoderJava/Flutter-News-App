@@ -30,24 +30,6 @@ flutter run --release -t lib/main_production.dart -d <device_id>
 For iOS, to build and release there is no configuration. Just follow the instructions from the [documentation](https://flutter.dev/docs/deployment/ios).
 
 ## Technology
-1. Flutter BLoC<br />
-BLoC (Business Logic Component) is design pattern helps to separate *presentation* from *business logic*.
-2. Dio<br />
-A powerful HTTP client for Dart, which supports interceptors, FormData, Request Cancellation, File Downloading, Timeout, etc.
-3. JSON Serializable<br />
-Automatically generate code for converting to and from JSON by annotating Dart classes.
-4. Intl<br />
-Plugin to provides internalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
-5. Url Launcher<br />
-Flutter plugin for launching a URL on Android and iOS.
-6. Build Runner<br />
-Package to provides a concrete way of generating files using Dart code, outside of tools like `pub server/build`, files are always generated directly on disk, and rebuilds are *incremental-* inspired by tools such as Bazel.
-7. Cached Network Image<br />
-Flutter library to load and cache network images. Can also be used with placeholder and error widgets.
-8. Equatable<br />
-An abstract class that helps to implement equality without needing to explicitly override == and hashCode.
-9. 
-
 1. Dio<br />
 A powerful Http client for Dart, which supports interceptors, FormData, Request Cancellation, File Downloading, Timeout, etc.
 2. Flutter BLoC</br />
