@@ -3,6 +3,8 @@
 [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
+![Flutter News App](https://github.com/CoderJava/Flutter-News-App/blob/master/screenshots/social%20media%20preview.png)
+
 # Flutter News App
 News App developed with Flutter and API from [News API](https://newsapi.org)
 
@@ -40,6 +42,7 @@ For iOS, to build and release there is no configuration. Just follow the instruc
 - [X] Refresh list daily news with pull to refresh style.
 - [X] Go to detail news website.
 - [X] Search news.
+- [X] Dark mode support.
 
 ## Technology
 1. Dio<br />
