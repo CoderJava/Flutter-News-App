@@ -79,6 +79,3 @@ A mock framework inspired by Mockito.
 A testing library which makes it easy to test blocs.
 17. JSON Serializable<br />
 Automatically generate code for converting to and from JSON by annotating Dart classes.
-
-
-![News App](https://github.com/CoderJava/Flutter-News-App/blob/master/screenshots/output_app_v2.png)
