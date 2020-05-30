@@ -8,10 +8,13 @@ import 'package:flutter_news_app/feature/data/model/categorynews/category_news_m
 import 'package:flutter_news_app/feature/data/model/topheadlinesnews/top_headlines_news_response_model.dart';
 import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
 import 'package:flutter_news_app/feature/presentation/page/search/search_page.dart';
+import 'package:flutter_news_app/feature/presentation/page/settings/settings_page.dart';
 import 'package:flutter_news_app/feature/presentation/widget/widget_failure_message.dart';
 import 'package:flutter_news_app/feature/presentation/widget/widget_item_news.dart';
 import 'package:flutter_news_app/injection_container.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -76,62 +79,87 @@ class _HomePageState extends State<HomePage> {
               }
             }
           },
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Color(0xFFEFF5F5),
-              ),
-              SafeArea(
-                child: Container(
-                  width: double.infinity,
-                  color: Color(0xFFEFF5F5),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 24.h,
+          child: ValueListenableBuilder(
+            valueListenable: Hive.box('settings').listenable(),
+            builder: (context, box, widget) {
+              var isDarkMode = box.get('darkMode') ?? false;
+              return Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: isDarkMode ? null : Color(0xFFEFF5F5),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 48.w),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Daily News',
-                                style: TextStyle(
-                                  fontSize: 48.sp,
+                  SafeArea(
+                    child: Container(
+                      width: double.infinity,
+                      color: isDarkMode ? null : Color(0xFFEFF5F5),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 24.h,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 48.w),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    'Daily News',
+                                    style: TextStyle(
+                                      fontSize: 48.sp,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => SearchPage()),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: 'iconSearch',
+                                    child: Icon(
+                                      Icons.search,
+                                      size: 64.w,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 48.w),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SettingsPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.settings,
+                                    size: 64.w,
+                                  ),
+                                ),
+                              ],
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SearchPage()),
-                                );
-                              },
-                              child: Hero(
-                                tag: 'iconSearch',
-                                child: Icon(Icons.search),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          WidgetDateToday(),
+                          SizedBox(height: 24.h),
+                          WidgetCategoryNews(
+                              listCategories: listCategories, indexDefaultSelected: indexCategorySelected),
+                          SizedBox(height: 24.h),
+                          Expanded(
+                            child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
+                          ),
+                        ],
                       ),
-                      WidgetDateToday(),
-                      SizedBox(height: 24.h),
-                      WidgetCategoryNews(listCategories: listCategories),
-                      SizedBox(height: 24.h),
-                      Expanded(
-                        child: Platform.isIOS ? _buildWidgetContentNewsIOS() : _buildWidgetContentNewsAndroid(),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -404,8 +432,12 @@ class _HomePageState extends State<HomePage> {
 
 class WidgetCategoryNews extends StatefulWidget {
   final List<CategoryNewsModel> listCategories;
+  final int indexDefaultSelected;
 
-  WidgetCategoryNews({@required this.listCategories});
+  WidgetCategoryNews({
+    @required this.listCategories,
+    @required this.indexDefaultSelected,
+  });
 
   @override
   _WidgetCategoryNewsState createState() => _WidgetCategoryNewsState();
@@ -416,7 +448,7 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
 
   @override
   void initState() {
-    indexCategorySelected = 0;
+    indexCategorySelected = widget.indexDefaultSelected;
     super.initState();
   }
 
@@ -439,12 +471,11 @@ class _WidgetCategoryNewsState extends State<WidgetCategoryNews> {
                 if (indexCategorySelected == index) {
                   return;
                 }
-                setState(() {
-                  indexCategorySelected = index;
-                });
+                setState(() => indexCategorySelected = index);
                 var topHeadlinesNewsBloc = BlocProvider.of<TopHeadlinesNewsBloc>(context);
-                topHeadlinesNewsBloc
-                    .add(ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: indexCategorySelected));
+                topHeadlinesNewsBloc.add(
+                  ChangeCategoryTopHeadlinesNewsEvent(indexCategorySelected: index),
+                );
               },
               child: Container(
                 child: AnimatedContainer(
