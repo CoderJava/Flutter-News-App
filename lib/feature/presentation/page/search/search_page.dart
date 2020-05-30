@@ -42,6 +42,8 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
+    var theme = Theme.of(context);
+    var isDarkTheme = theme.brightness == Brightness.dark;
     return Scaffold(
       body: BlocProvider<TopHeadlinesNewsBloc>(
         create: (context) => topHeadlinesNewsBloc,
@@ -50,11 +52,11 @@ class _SearchPageState extends State<SearchPage> {
             Container(
               width: double.infinity,
               height: double.infinity,
-              color: Color(0xFFEFF5F5),
+              color: isDarkTheme ? null : Color(0xFFEFF5F5),
             ),
             SafeArea(
               child: Container(
-                color: Color(0xFFEFF5F5),
+                color: isDarkTheme ? null : Color(0xFFEFF5F5),
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
                   vertical: 24.h,

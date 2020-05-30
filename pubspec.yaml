@@ -61,6 +61,12 @@ dependencies:
   # Vector Graphics 1.1 files.
   flutter_svg: ^0.17.4
 
+  # Lightweight and blazing fast key-value database written in pure Dart.
+  hive: ^1.4.1+1
+
+  # Extension for Hive. Make it easier to use Hive in Flutter apps.
+  hive_flutter: ^0.3.0+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

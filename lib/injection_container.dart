@@ -9,9 +9,8 @@ import 'package:flutter_news_app/feature/data/repository/news/news_repository_im
 import 'package:flutter_news_app/feature/domain/repository/news/news_repository.dart';
 import 'package:flutter_news_app/feature/domain/usecase/gettopheadlinesnews/get_top_headlines_news.dart';
 import 'package:flutter_news_app/feature/domain/usecase/searchtopheadlinesnews/search_top_headlines_news.dart';
+import 'package:flutter_news_app/feature/presentation/bloc/topheadlinesnews/bloc.dart';
 import 'package:get_it/get_it.dart';
-
-import 'feature/presentation/bloc/topheadlinesnews/bloc.dart';
 
 final sl = GetIt.instance;
 
