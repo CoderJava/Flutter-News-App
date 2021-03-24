@@ -9,7 +9,9 @@
 News App developed with Flutter and API from [News API](https://newsapi.org)
 
 ## Versions
-For Flutter News App v1, you can check this [repository](https://github.com/CoderJava/Flutter-News-App/tree/v1.0.0).
+- [v1.0.0](https://github.com/CoderJava/Flutter-News-App/tree/v1.0.0)
+- [v2.0.0](https://github.com/CoderJava/Flutter-News-App/tree/v2.0.0)
+- v3.0.0 under development. You can check the progress [in here](https://github.com/CoderJava/Flutter-News-App/projects/2)
 
 ## Usage
 1. Please open file **constant_config.dart** and change `YOUR API KEY` in the variable `keyNewsApi` with your own.
