@@ -1,0 +1,1 @@
+class Connection implements Exception {}
