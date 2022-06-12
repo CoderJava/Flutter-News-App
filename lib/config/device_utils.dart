@@ -1,19 +1,19 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
 enum BuildMode {
-  DEBUG,
-  PROFILE,
-  RELEASE,
+  debug,
+  profile,
+  release,
 }
 
 class DeviceUtils {
   static BuildMode currentBuildMode() {
     if (const bool.fromEnvironment('dart.vm.product')) {
-      return BuildMode.RELEASE;
+      return BuildMode.release;
     }
-    var result = BuildMode.PROFILE;
+    var result = BuildMode.profile;
     assert(() {
-      result = BuildMode.DEBUG;
+      result = BuildMode.debug;
       return true;
     }());
     return result;
