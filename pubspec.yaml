@@ -21,7 +21,7 @@ dependencies:
   dio: ^4.0.3
 
   # Flutter widgets that make it easy to implement the BLoC design pattern.
-  flutter_bloc: ^7.3.3
+  flutter_bloc: ^8.0.1
 
   # Flutter plugin for launching a URL.http
   url_launcher: ^6.0.12
@@ -52,7 +52,7 @@ dependencies:
   intl: ^0.17.0
 
   # Classes and helper functions that support JSON code generation via the 'json_serializable' package
-  json_annotation: ^4.3.0
+  json_annotation: ^4.5.0
 
   # Flutter plugin for querying information about the application pacakge,
   # such as CFBundleVersion on iOS or versionCode on Android.
@@ -72,14 +72,14 @@ dev_dependencies:
   mockito: ^5.0.16
 
   # A testing library which makes it easy to test blocs
-  bloc_test: ^8.5.0
+  bloc_test: ^9.0.3
 
   # Automatically generate code for converting to and from JSON
   # by annotating Dart classes.
   json_serializable: ^6.0.1
 
   # Recommended lints for Flutter apps, packages, and plugins  to encourage good coding practices.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
 
