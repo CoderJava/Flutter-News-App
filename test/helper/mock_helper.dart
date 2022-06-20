@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_news_app/core/network/network_info.dart';
 import 'package:flutter_news_app/core/util/helper.dart';
 import 'package:flutter_news_app/feature/data/datasource/news/news_remote_data_source.dart';
+import 'package:flutter_news_app/feature/domain/repository/news/news_repository.dart';
 import 'package:mockito/annotations.dart';
 
 @GenerateMocks([
@@ -11,5 +12,6 @@ import 'package:mockito/annotations.dart';
   Helper,
   NewsRemoteDataSource,
   NetworkInfo,
+  NewsRepository,
 ])
 void main() {}
