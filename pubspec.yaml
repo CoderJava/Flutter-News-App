@@ -58,8 +58,12 @@ dependencies:
   # such as CFBundleVersion on iOS or versionCode on Android.
   package_info: ^2.0.2
 
-  # Easily configure any flutter application with globa variables using a `.env` file
+  # Easily configure any flutter application with global variables using a `.env` file
   flutter_dotenv: ^5.0.2
+
+  # An SVG rendering and widget library for Flutter, which allows painting and displaying
+  # Scalable Vector Graphics 1.1 files.
+  flutter_svg: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +96,9 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/svg/
+    - assets/translations/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
