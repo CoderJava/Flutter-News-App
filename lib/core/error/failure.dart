@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_news_app/core/util/constant_error_message.dart';
+import 'package:flutter_news_app/core/util/constant_value.dart';
 
 abstract class Failure extends Equatable {}
 
