@@ -5,6 +5,7 @@ import 'package:flutter_news_app/core/util/helper.dart';
 import 'package:flutter_news_app/feature/data/datasource/news/news_remote_data_source.dart';
 import 'package:flutter_news_app/feature/domain/repository/news/news_repository.dart';
 import 'package:mockito/annotations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @GenerateMocks([
   Connectivity,
@@ -13,5 +14,6 @@ import 'package:mockito/annotations.dart';
   NewsRemoteDataSource,
   NetworkInfo,
   NewsRepository,
+  SharedPreferences,
 ])
 void main() {}
