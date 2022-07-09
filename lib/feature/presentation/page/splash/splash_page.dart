@@ -16,7 +16,7 @@ class SplashPage extends StatelessWidget {
       backgroundColor: constantColor.primaryColor500,
       body: Center(
         child: SvgPicture.asset(
-          AssetSvg.logoFlutterNews,
+          AssetSvg.logoFlutterNewsRectangle,
           width: widthScreen / 2,
         ),
       ),
