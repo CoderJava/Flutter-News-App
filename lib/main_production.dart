@@ -1,17 +1,22 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news_app/app.dart';
 import 'package:flutter_news_app/config/base_url_config.dart';
 import 'package:flutter_news_app/config/flavor_config.dart';
 import 'package:flutter_news_app/core/util/constant_value.dart';
+import 'package:flutter_news_app/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   final constantColor = ConstantColor();
   final baseUrlConfig = BaseUrlConfig();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   FlavorConfig(
     flavor: Flavor.production,
     colorPrimary: constantColor.primaryColor500,
