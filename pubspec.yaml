@@ -72,6 +72,9 @@ dependencies:
   # Flutter plugin for Firebase Core, enabling connecting to multiple Firebase apps.
   firebase_core: ^1.19.1
 
+  # Flutter plugin for Firebase auth.
+  firebase_auth: ^3.4.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
