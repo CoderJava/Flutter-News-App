@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "758124052811-uglomelrnk41rgisdu7r6a45e5rm0do7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ysn.flutter_news_app",
+            "certificate_hash": "9f63a2fac8cd4ea2acf7e89e3e425c7ddf2ce8eb"
+          }
+        },
+        {
           "client_id": "758124052811-s8ehiu2a9d024pc9pc7l9q4siu9i54mb.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "758124052811-s8ehiu2a9d024pc9pc7l9q4siu9i54mb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "758124052811-bsgc75rn2qng5vfsqhdi6hq3vpagtcu7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ysn.flutterNewsApp"
+              }
             }
           ]
         }

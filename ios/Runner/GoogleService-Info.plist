@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>758124052811-bsgc75rn2qng5vfsqhdi6hq3vpagtcu7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.758124052811-bsgc75rn2qng5vfsqhdi6hq3vpagtcu7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>758124052811-uglomelrnk41rgisdu7r6a45e5rm0do7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA_gK5e9tys4srJ_rw-4wQ_Dp_PQ7zcwBg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>758124052811</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ysn.flutterNewsApp</string>
+	<key>PROJECT_ID</key>
+	<string>flutter-news-8c3d7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutter-news-8c3d7.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:758124052811:ios:2dd4583dd48a59843c68ce</string>
+</dict>
+</plist>
