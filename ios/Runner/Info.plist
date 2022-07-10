@@ -43,5 +43,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+	    <dict>
+	        <key>CFBundleTypeRole</key>
+	        <string>Editor</string>
+	        <key>CFBundleURLSchemes</key>
+	        <array>
+	            <string>com.googleusercontent.apps.758124052811-bsgc75rn2qng5vfsqhdi6hq3vpagtcu7</string>
+	        </array>
+	    </dict>
+	</array>
 </dict>
 </plist>
