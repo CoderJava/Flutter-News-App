@@ -75,6 +75,12 @@ dependencies:
   # Flutter plugin for Firebase auth.
   firebase_auth: ^3.4.1
 
+  # The font awesome icon pack available as Flutter icons.
+  font_awesome_flutter: ^10.1.0
+
+  # Flutter plugin for Google sign in.
+  google_sign_in: ^5.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -108,6 +114,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/svg/
+    - assets/image/
     - assets/translations/
 
   # To add custom fonts to your application, add a fonts section here,
