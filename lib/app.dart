@@ -49,7 +49,7 @@ class _AppState extends State<App> {
         ),
       ),
       title: FlavorConfig.instance.flavor == Flavor.development ? 'Dev FNews' : 'FNews',
-      home: SplashPage(),
+      home: const SplashPage(),
       onGenerateRoute: (RouteSettings settings) => AppRoute.onGenerateRoute(settings),
       builder: (context, child) {
         return GestureDetector(
