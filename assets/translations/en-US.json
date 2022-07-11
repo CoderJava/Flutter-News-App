@@ -1,4 +1,10 @@
 {
   "f_news": "FNews",
-  "dev_f_news": "Dev FNews"
+  "dev_f_news": "Dev FNews",
+  "smart_news_for_smart_people": "Smart news for smart people",
+  "get_started_by_sign_in_now": "Get started by sign in now",
+  "sign_in_with_google": "Sign in with Google",
+  "sign_in_with_twitter": "Sign in with Twitter",
+  "sign_in_with_github": "Sign in with Github",
+  "sign_out": "Sign out"
 }
