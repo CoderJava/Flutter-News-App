@@ -8,6 +8,7 @@ import 'package:flutter_news_app/config/base_url_config.dart';
 import 'package:flutter_news_app/config/flavor_config.dart';
 import 'package:flutter_news_app/core/util/constant_value.dart';
 import 'package:flutter_news_app/firebase_options.dart';
+import 'package:flutter_news_app/injection_container.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await di.init();
   FlavorConfig(
     flavor: Flavor.production,
     colorPrimary: constantColor.primaryColor500,
