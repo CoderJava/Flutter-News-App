@@ -15,10 +15,10 @@ dependencies:
 
   # A powerful Http client for Dart, which supports interceptors, FormData, Request Cancellation,
   # File Downloading, Timeout etc.
-  dio: ^3.0.9
+  dio: ">=3.0.9 <6.0.0"
 
   # Flutter widgets that make it easy to implement the BLoC design pattern.
-  flutter_bloc: ^3.2.0
+  flutter_bloc: ">=3.2.0 <9.0.0"
 
   # Package provides internalization and localization facilities, including message translation,
   # plurals and genders, date/number formatting and parsing, and bidirectional text.
@@ -59,29 +59,29 @@ dependencies:
 
   # An SVG rendering and widget library for Flutter, which allows painting and displaying Scalable
   # Vector Graphics 1.1 files.
-  flutter_svg: ^0.17.4
+  flutter_svg: ">=0.17.4 <3.0.0"
 
   # Lightweight and blazing fast key-value database written in pure Dart.
-  hive: ^1.4.1+1
+  hive: ">=1.4.1+1 <3.0.0"
 
   # Extension for Hive. Make it easier to use Hive in Flutter apps.
-  hive_flutter: ^0.3.0+2
+  hive_flutter: ">=0.3.0+2 <2.0.0"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # Tools to write binaries that run builders.
-  build_runner: ^1.8.1
+  build_runner: ">=1.8.1 <3.0.0"
 
   # A mock framework inspired by Mockito.
-  mockito: ^4.1.1
+  mockito: ">=4.1.1 <6.0.0"
 
   # A testing library which makes it easy to test blocs.
-  bloc_test: ^4.0.0
+  bloc_test: ">=4.0.0 <10.0.0"
 
   # Automatically generate code for converting to and from JSON by annotating Dart classes.
-  json_serializable: ^3.3.0
+  json_serializable: ">=3.3.0 <7.0.0"
 
 flutter:
 
